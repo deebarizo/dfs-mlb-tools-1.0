@@ -1,0 +1,173 @@
+.lineup-section
+{
+	display: none;
+}
+
+.games-toggle,
+.lineup-toggle
+{
+	margin-left: 20px;
+}
+
+.game-buttons
+{
+	display: none;
+}
+
+.dvp-tooltip .qtip-content
+{
+	margin: 0;
+	padding: 0;
+}
+
+.dvp-tooltip
+{
+	border-color: #555;
+}
+
+.table th, .table td 
+{
+	padding: 2px;
+}
+
+.team-info
+{
+	display: none;
+}
+
+.chosen-team-rotation
+{
+	display: none;
+}
+
+.team-rotation-line-chart
+{
+	height: 800px;
+}
+
+.game-buttons
+{
+	padding-bottom: 25px;
+}
+
+.salary-reset
+{
+	margin-left: 15px;
+}
+
+.options-inline
+{
+	display: inline-block;
+	margin-right: 20px;
+}
+
+.options-inline select
+{
+	width: 100px;
+}
+
+.salary-input,
+.team-drop-down
+{
+	margin-right: 10px;
+	width: 150px;
+}
+
+.team-drop-down
+{	
+	margin-bottom: 0;
+}
+
+#daily-stats
+{
+	font-size: 10px;
+}
+
+.table-scroll
+{
+	height: 350px;
+	overflow: auto;  
+}
+
+.vr-column
+{
+	background-color: #FFE6C2;
+}
+
+.actual-stats-column
+{
+	background-color: #B2DBF0;
+}
+
+.table tbody tr:hover td
+{
+	background-color: #DCDCDC;
+}
+
+.dvp-team-drop-down table.inside-box
+{
+	margin-bottom: 12px;
+}
+
+.inside-box th 
+{
+	background-color: #FFEBCC;
+	border: 1px solid #DDDDDD;
+	padding: 4px;
+	text-align: left;
+}
+
+.inside-box td
+{
+	padding: 4px;
+	text-align: left;
+	border: 1px solid #DDDDDD;
+}
+
+.inside-box td.rank
+{
+	background-color: #B2DBF0;
+}
+
+.lineup, 
+.lineup-tracker
+{
+	font-size: 11px;
+}
+
+.lineup-position
+{
+	width: 8px;
+}
+
+.lineup-player
+{
+	width: 200px;
+}
+
+.lineup-salary
+{
+	width: 30px;
+}
+
+.lineup-fpts
+{
+	width: 30px;
+}
+
+.lineup-tracker
+{
+	margin-left: 20px;
+}
+
+.lineup-tracker-data
+{
+	width: 45px;
+}
+
+.fa-plus-square,
+.fa-minus-square
+{
+	color: #bbb;
+	cursor: pointer;
+}
