@@ -1,6 +1,6 @@
 		<div id="wrapper">
 			<section>
-	      		<h3><i class="fa fa-upload"></i> Update FD Salaries</h3>
+	      		<h3><i class="fa fa-upload"></i> <?php echo $subhead; ?></h3>
 
 	      		<?php if ($message != 'Form validation error.') { ?>
 			      			<p style="color:red"><?php echo $message; ?></p>
