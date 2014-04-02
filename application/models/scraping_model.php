@@ -3,7 +3,7 @@ class scraping_model extends CI_Model {
 	public function __construct() {
 		parent::__construct();
 
-		# $this->load->database();
+		$this->load->database();
 	}
 
 	public function scrape_fd_salaries($form_data, $today_year) {
@@ -16,6 +16,10 @@ class scraping_model extends CI_Model {
 		$h1_tag_with_date = $html->find('span[class=sport-icon]')->parent()->text();
 
 		$month_and_day = preg_replace("/(.+)(\w\w\w\s\d+)(\w\w$)/", "$2", $h1_tag_with_date);
+
+		if ($month_and_day == $h1_tag_with_date) {
+			$month_and_day = preg_replace("/(.+)(\w\w\w\s\d+)(\w\w\s\(\w+\))/", "$2", $h1_tag_with_date);
+		}
 
 		$date = date('Y-m-d', strtotime($month_and_day.', '.$today_year));
 
@@ -32,6 +36,8 @@ class scraping_model extends CI_Model {
 
 			for ($i = 0; $i < $num_players; $i++) { 
 				$fstats_fd[$i]['name'] = $html->find('tr[data-role=player]:eq('.$i.')')->find('td:eq(1)')->text();
+					$fstats_fd[$i]['name'] = preg_replace("/DL$/", "", $fstats_fd[$i]['name']);
+					$fstats_fd[$i]['name'] = preg_replace("/P$/", "", $fstats_fd[$i]['name']);
 				$fstats_fd[$i]['team'] = $html->find('tr[data-role=player]:eq('.$i.')')->find('td:eq(4)')->find('b')->text();
 				$fstats_fd[$i]['position'] = $html->find('tr[data-role=player]:eq('.$i.')')->find('td:eq(0)')->text();
 				
@@ -50,6 +56,9 @@ class scraping_model extends CI_Model {
 			}
 
 			# echo '<pre>';
+			# var_dump($h1_tag_with_date);
+			# var_dump($month_and_day);
+			# var_dump($date);
 			# var_dump($fstats_fd);
 			# echo '</pre>'; exit();	
 

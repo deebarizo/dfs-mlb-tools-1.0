@@ -27,8 +27,8 @@ class Update extends CI_Controller {
 			$data['message'] = 'Form validation error.';
 		} else {
 			$form_data = array(
-							'url' => set_value('url')
-						);
+				'url' => set_value('url')
+			);
 
 			$this->load->model('scraping_model');
 			$data['message'] = $this->scraping_model->scrape_fd_salaries($form_data, $today_year);

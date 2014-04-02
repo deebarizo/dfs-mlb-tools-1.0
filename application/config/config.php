@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost/dfsnbatools/';
+$config['base_url']	= 'http://localhost/dfsmlbtools/';
 
 /*
 |--------------------------------------------------------------------------
