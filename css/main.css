@@ -1,0 +1,32 @@
+header {
+	margin: 0 10px; 
+	padding: 10px;
+}
+
+h1 {
+	margin: 0;
+}
+
+td, th {
+	border: 1px solid #ccc;
+	padding: 5px;
+}
+
+.col-wrapper {
+	width: 1530px;	
+}
+
+.col {
+	width: 470px; 
+	margin: 0 10px; 
+	padding: 10px;
+}
+
+.col-left,
+.col-mid {
+	float: left;
+}
+
+.col-right {
+	float: right;
+}
