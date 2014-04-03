@@ -30,3 +30,7 @@ td, th {
 .col-right {
 	float: right;
 }
+
+tr.top-play {
+	text-decoration: line-through;
+}

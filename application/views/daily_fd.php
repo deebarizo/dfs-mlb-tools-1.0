@@ -22,7 +22,7 @@
 							</thead>
 							<tbody>
 								<?php foreach ($fstats_fd as $key => $value) { ?>
-		 							<tr>
+		 							<tr class="player">
 										<td><?php echo $value['position']; ?></td>
 										<td><?php echo $value['name']; ?></td>
 										<td><?php echo $value['fppg']; ?></td>

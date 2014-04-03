@@ -15,7 +15,7 @@ class Daily extends CI_Controller {
 	}
 
 	public function fd($date = 'empty') {
-		if ($date == 'empty')	{
+		if ($date == 'empty') {
 			$date = $this->latest_date_in_db;
 		}
 
