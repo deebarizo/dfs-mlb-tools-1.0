@@ -8,7 +8,7 @@
 		      		<?php } ?>
 		
 					<?php if (isset($fstats_fd)) { ?>
-						<table>
+						<table class="salaries">
 							<thead>
 								<tr>
 									<th data-sort='string'>Pos</th>
@@ -22,7 +22,7 @@
 							</thead>
 							<tbody>
 								<?php foreach ($fstats_fd as $key => $value) { ?>
-		 							<tr class="player">
+		 							<tr class="player" data-index="<?php echo $key; ?>">
 										<td><?php echo $value['position']; ?></td>
 										<td><?php echo $value['name']; ?></td>
 										<td><?php echo $value['fppg']; ?></td>
