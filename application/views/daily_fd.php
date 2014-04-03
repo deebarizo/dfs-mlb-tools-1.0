@@ -40,7 +40,7 @@
 				<div class="col col-mid">
 		      		<h3>Top Plays</h3>
 		  
-					<table>
+					<table class="top-plays">
 						<thead>
 							<tr>
 								<th data-sort='string'>Pos</th>
@@ -54,7 +54,7 @@
 						</thead>
 						<tbody>
  							<tr>
-								<td colspan="7">No plays yet.</td>
+								<td class="no-top-plays" colspan="7">No plays yet.</td>
 							</tr>
 						</tbody>
 					</table>

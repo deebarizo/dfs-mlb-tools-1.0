@@ -34,3 +34,7 @@ td, th {
 tr.top-play {
 	text-decoration: line-through;
 }
+
+tr.no-top-plays {
+	
+}

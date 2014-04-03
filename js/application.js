@@ -3,18 +3,33 @@ $(document).ready(function() {
 		if ($(this).hasClass("top-play") != true) {
 			$(this).addClass("top-play");
 
-			var player = {};
+			var player = [];
 
-			var count;
-			count = 0;
+			var playerData = $(this).children();
 
-			console.log($(this).children());
+			console.log(playerData);
 
-		/*	do {
-				$(this).eq(count).alert('bob');
+			$(playerData).each(function(index){
+				player[index] = $(this).text();
+			});
 
-				count++;
-			} while $(this).eq(count).length != 0; */
+			console.log(player);
+
+			if($("td.no-top-plays").is(":visible")) {
+				$("td.no-top-plays").hide();
+			}
+
+			var html = "<tr>";
+
+			console.log(player.length);
+
+			for (var i = 0; i < player.length; i++) {
+				html += "<td>"+player[i]+"</td>";
+			};
+
+			html += "</tr>";
+
+			$("table.top-plays > tbody:last").append(html);
 		} else {
 			$(this).removeClass("top-play");
 		}
