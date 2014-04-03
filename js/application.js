@@ -49,4 +49,16 @@ $(document).ready(function() {
 			$("td.no-top-plays").show();
 		} 		
 	}
+
+	$("button.solve-optimal-lineup").click(function() {
+		var topPlays = [];
+
+		$("table.top-plays > tbody > tr").each(function(index) {
+			var playerData = $(this).children();
+
+			topPlays.push(playerData);
+		});
+
+		console.log(topPlays);
+	});
 });

@@ -80,5 +80,7 @@
 							</tr>
 						</tbody>
 					</table>
+
+					<button type="button" class="solve-optimal-lineup">Solve</button>
 				</div>
 			</section>
