@@ -110,5 +110,58 @@ $(document).ready(function() {
 			alert("There are unfilled positions. "+unfilledPositions);
 			return false;
 		}
+
+		var allPositions = ["P", "C", "1B", "2B", "3B", "SS", "OF"];
+		var sortedSalaries = {};
+
+		for (var i = 0; i < allPositions.length; i++) {
+			sortedSalaries[allPositions[i]] = [];
+
+			for (var n = 0; n < topPlays.length; n++) {
+				var position = $(topPlays[n][0]).text();
+
+				if (allPositions[i] == position) {
+					var name = $(topPlays[n][1]).text();
+					var team = $(topPlays[n][4]).text();
+					var opp = $(topPlays[n][5]).text();
+					var salary = parseInt($(topPlays[n][6]).text());
+
+					sortedSalaries[allPositions[i]].push([position, name, team, opp, salary]);
+				}
+			};
+
+		    sortedSalaries[allPositions[i]] = sortedSalaries[allPositions[i]].sort(function(a,b) {
+		    	return a[4] > b[4];
+		    });
+		};		
+
+		console.log(sortedSalaries);
+
+		var totalSalary = sortedSalaries["P"][0][4] + 
+						  sortedSalaries["C"][0][4] + 
+						  sortedSalaries["1B"][0][4] + 
+						  sortedSalaries["2B"][0][4] + 
+						  sortedSalaries["3B"][0][4] + 
+						  sortedSalaries["SS"][0][4] + 
+						  sortedSalaries["OF"][0][4] + 
+						  sortedSalaries["OF"][1][4] + 
+						  sortedSalaries["OF"][2][4];
+
+		console.log(totalSalary);
+
+		var diff = totalSalary - 35000;
+
+		if (totalSalary > 35000) {
+			alert("Optimal lineup is above the salary cap by $"+diff+".");
+			return false;
+		}
+
+		if (diff * -1 > 300) {
+			// run solver function
+
+			
+		} else {
+			// done!
+		}
 	});
 });
