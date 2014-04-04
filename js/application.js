@@ -156,12 +156,74 @@ $(document).ready(function() {
 			return false;
 		}
 
-		if (diff * -1 > 300) {
-			// run solver function
+		var positionCount = 0;
+		var rankCount = 0;
+		var changeTracker = [
+			["P", 0], 
+			["C", 0], 
+			["1B", 0], 
+			["2B", 0], 
+			["3B", 0], 
+			["SS", 0], 
+			["OF", 0], 
+			["OF", 1], 
+			["OF", 2]
+		];
 
-			
+		if (diff * -1 > 300) {
+			for (var i = 0; i < 500; i++) {
+				if (typeof sortedSalaries[changeTracker[positionCount][0]][changeTracker[rankCount][1]] == "undefined") {
+					if (positionCount == 6) {
+						positionCount = 0;
+					} else {
+						positionCount++;
+					}
+					
+					continue;
+				} else {
+					if (positionCount <= 5) {
+						changeTracker[positionCount][1]++;
+					} else {
+						changeTracker[positionCount][1] += 3;
+					}
+
+					totalSalary = sortedSalaries["P"][changeTracker[0][1]][4] + 
+								  sortedSalaries["C"][changeTracker[1][1]][4] + 
+								  sortedSalaries["1B"][changeTracker[2][1]][4] + 
+								  sortedSalaries["2B"][changeTracker[3][1]][4] + 
+								  sortedSalaries["3B"][changeTracker[4][1]][4] + 
+								  sortedSalaries["SS"][changeTracker[5][1]][4] + 
+								  sortedSalaries["OF"][changeTracker[6][1]][4] + 
+								  sortedSalaries["OF"][changeTracker[7][1]][4] + 
+								  sortedSalaries["OF"][changeTracker[8][1]][4];
+
+					diff = totalSalary - 35000;
+
+					console.log(totalSalary);
+
+					if (totalSalary > 35000) {
+						if (positionCount <= 5) {
+							changeTracker[positionCount][1]--;
+						} else {
+							changeTracker[positionCount][1] -= 3;
+						}
+
+						if (positionCount == 6) {
+							positionCount = 0;
+						} else {
+							positionCount++;
+						}					
+						
+						continue;
+					} else if (diff * -1 > 300) {
+						continue;
+					} else {
+						alert("Here is the optimal lineup total salary $"+totalSalary+".");
+					}
+				}
+			}		
 		} else {
-			// done!
-		}
+			alert("Here is the optimal lineup total salary $"+totalSalary+".");
+		}		
 	});
 });
