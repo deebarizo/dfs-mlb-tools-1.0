@@ -59,6 +59,56 @@ $(document).ready(function() {
 			topPlays.push(playerData);
 		});
 
-		console.log(topPlays);
+		var singlePositions = ["P", "C", "1B", "2B", "3B", "SS"];
+		var unfilledPositions = [];
+		var positionFilled = false;
+
+		for (var i = 0; i < singlePositions.length; i++) {
+			for (var n = 0; n < topPlays.length; n++) {
+				var position = $(topPlays[n][0]).text();
+
+				if (singlePositions[i] == position) {
+					positionFilled = true;
+
+					break;
+				}
+			};
+
+			if (positionFilled == false) {
+				unfilledPositions.push(singlePositions[i]);
+			}
+
+			positionFilled = false;
+		};
+
+		var multiplePositions = [[3, "OF"]];
+		var count = 0;
+
+		for (var i = 0; i < multiplePositions.length; i++) {
+			for (var n = 0; n < topPlays.length; n++) {
+				var position = $(topPlays[n][0]).text();
+
+				if (multiplePositions[i][1] == position) {
+					count++;
+
+					if (count == multiplePositions[i][0]) {
+						positionFilled = true;
+
+						break;
+					}
+				}
+			};
+
+			if (positionFilled == false) {
+				unfilledPositions.push([count, multiplePositions[i][1]]);
+			}
+
+			positionFilled = false;
+		};		
+
+		if (unfilledPositions.length > 0) {
+			alert("There are unfilled positions. "+unfilledPositions);
+			return false;
+		}
 	});
 });
