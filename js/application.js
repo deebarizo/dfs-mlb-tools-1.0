@@ -166,6 +166,11 @@ $(document).ready(function() {
 			["OF", 1], 
 			["OF", 2]
 		];
+		var solverCount = 0;
+		var bestLineup = {
+			salary: totalSalary,
+			lineup: changeTracker
+		};
 
 		if (diff * -1 > 300) { 
 			for (var i = 0; i < 500; i++) {
@@ -175,35 +180,78 @@ $(document).ready(function() {
 					changeTracker[positionCount][1]++;
 				}
 
-				totalSalary = sortedSalaries["P"][changeTracker[0][1]][4] + 
-							  sortedSalaries["C"][changeTracker[1][1]][4] + 
-							  sortedSalaries["1B"][changeTracker[2][1]][4] + 
-							  sortedSalaries["2B"][changeTracker[3][1]][4] + 
-							  sortedSalaries["3B"][changeTracker[4][1]][4] + 
-							  sortedSalaries["SS"][changeTracker[5][1]][4] + 
-							  sortedSalaries["OF"][changeTracker[6][1]][4] + 
-							  sortedSalaries["OF"][changeTracker[7][1]][4] + 
-							  sortedSalaries["OF"][changeTracker[8][1]][4];
+				console.log("changeTracker: "+changeTracker);
+				console.log("positionCount: "+positionCount);
 
-				diff = totalSalary - 35000;
-
-				console.log(totalSalary);
-
-				if (totalSalary > 35000) {
+				if (typeof sortedSalaries[changeTracker[positionCount][0]][changeTracker[positionCount][1]] == "undefined") {
 					if (positionCount <= 5) {
 						changeTracker[positionCount][1]--;
 					} else {
 						changeTracker[positionCount][1] -= 3;
 					}
 
-					positionCount++;	
-				}	
+					positionCount++;
+				} else {
+					totalSalary = sortedSalaries["P"][changeTracker[0][1]][4] + 
+								  sortedSalaries["C"][changeTracker[1][1]][4] + 
+								  sortedSalaries["1B"][changeTracker[2][1]][4] + 
+								  sortedSalaries["2B"][changeTracker[3][1]][4] + 
+								  sortedSalaries["3B"][changeTracker[4][1]][4] + 
+								  sortedSalaries["SS"][changeTracker[5][1]][4] + 
+								  sortedSalaries["OF"][changeTracker[6][1]][4] + 
+								  sortedSalaries["OF"][changeTracker[7][1]][4] + 
+								  sortedSalaries["OF"][changeTracker[8][1]][4];
 
-				console.log("changeTracker: "+changeTracker);
-				console.log("positionCount: "+positionCount);
+					diff = totalSalary - 35000;
+
+					console.log(totalSalary);
+
+					if (totalSalary > bestLineup['salary'] && totalSalary <= 35000) {
+						bestLineup = {
+							salary: totalSalary,
+							lineup: changeTracker
+						};	
+					}
+
+					if (diff * -1 <= 300 && totalSalary <= 35000) {
+						console.log("We have a winner.");
+						console.log(bestLineup);
+						
+						break;	
+					}
+
+					if (totalSalary > 35000) {
+						if (positionCount <= 5) {
+							changeTracker[positionCount][1]--;
+
+							positionCount++;
+						} else {
+							changeTracker[positionCount][1] -= 3;
+
+							if (solverCount > 6) {
+								console.log("We don't have a winner.");
+								console.log(bestLineup);
+
+								break;							
+							}
+
+							positionCount = solverCount;
+							solverCount++;
+
+							if (changeTracker[positionCount][1] > 0) {
+								changeTracker[positionCount][1] -= 2;
+							} else {
+								changeTracker[positionCount][1] = 0;
+							}
+						}
+					}	
+				}
 			}		
 		} else {
-			alert("Here is the optimal lineup total salary $"+totalSalary+".");
-		}		
+			console.log("We have a winner.");
+			console.log(bestLineup);
+
+			return false;
+		}
 	});
 });
