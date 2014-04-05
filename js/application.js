@@ -17,13 +17,13 @@ $(document).ready(function() {
 				$("td.no-top-plays").hide();
 			}
 
-			var html = "<tr data-index='"+dataIndex+"'>";
+			var htmlTopPlays = "<tr data-index='"+dataIndex+"'>";
 			for (var i = 0; i < player.length; i++) {
-				html += "<td>"+player[i]+"</td>";
+				htmlTopPlays += "<td>"+player[i]+"</td>";
 			};
-			html += "</tr>";
+			htmlTopPlays += "</tr>";
 
-			$("table.top-plays > tbody:last").append(html);
+			$("table.top-plays > tbody:last").append(htmlTopPlays);
 		} else {
 			$(this).removeClass("top-play");
 
@@ -50,7 +50,7 @@ $(document).ready(function() {
 		} 		
 	}
 
-	$("button.solve-optimal-lineup").click(function() {
+	$("button.solver").click(function() {
 		var topPlays = [];
 
 		$("table.top-plays > tbody > tr").each(function(index) {
@@ -205,11 +205,15 @@ $(document).ready(function() {
 				if (typeof sortedSalaries[changeTracker[positionCount][0]][changeTracker[positionCount][1]] == "undefined") {
 					if (positionCount <= 5) {
 						changeTracker[positionCount][1]--;
+
+						positionCount++;
 					} else {
 						changeTracker[positionCount][1] -= 3;
+
+						positionCount = 0;
 					}
 
-					positionCount++;
+					
 				} else {
 					totalSalary = sortedSalaries["P"][changeTracker[0][1]][4] + 
 								  sortedSalaries["C"][changeTracker[1][1]][4] + 
@@ -244,9 +248,24 @@ $(document).ready(function() {
 					}
 
 					if (diff * -1 <= 300 && totalSalary <= 35000) {
-						console.log("We have a winner.");
-						console.log(bestLineup);
-						
+						$("table.optimal-lineup > tbody > tr").remove();
+
+						var htmlOptimalLineup;
+
+						for (var i = 0; i < bestLineup['lineup'].length; i++) {
+							htmlOptimalLineup += "<tr>";
+
+							for (var n = 0; n < bestLineup['lineup'][i].length; n++) {
+								htmlOptimalLineup += "<td>"+bestLineup['lineup'][i][n]+"</td>";
+							};
+
+							htmlOptimalLineup += "</tr>";
+						};
+
+						htmlOptimalLineup += "<td colspan='4'>Total Salary</td><td><strong>"+bestLineup['salary']+"</strong></td>";
+
+						$("table.optimal-lineup > tbody:last").append(htmlOptimalLineup);
+
 						return false;	
 					}
 
@@ -275,13 +294,45 @@ $(document).ready(function() {
 				}
 			}		
 		} else {
-			console.log("We have a winner.");
-			console.log(bestLineup);
+			$("table.optimal-lineup > tbody > tr").remove();
 
-			return false;
+			var htmlOptimalLineup;
+
+			for (var i = 0; i < bestLineup['lineup'].length; i++) {
+				htmlOptimalLineup += "<tr>";
+
+				for (var n = 0; n < bestLineup['lineup'][i].length; n++) {
+					htmlOptimalLineup += "<td>"+bestLineup['lineup'][i][n]+"</td>";
+				};
+
+				htmlOptimalLineup += "</tr>";
+			};
+
+			htmlOptimalLineup += "<td colspan='4'>Total Salary</td><td><strong>"+bestLineup['salary']+"</strong></td>";
+
+			$("table.optimal-lineup > tbody:last").append(htmlOptimalLineup);
+
+			return false;	
 		}
 
-		console.log("We don't have a winner.");
-		console.log(bestLineup);
+		$("table.optimal-lineup > tbody > tr").remove();
+
+		var htmlOptimalLineup;
+
+		for (var i = 0; i < bestLineup['lineup'].length; i++) {
+			htmlOptimalLineup += "<tr>";
+
+			for (var n = 0; n < bestLineup['lineup'][i].length; n++) {
+				htmlOptimalLineup += "<td>"+bestLineup['lineup'][i][n]+"</td>";
+			};
+
+			htmlOptimalLineup += "</tr>";
+		};
+
+		htmlOptimalLineup += "<td colspan='4'>Total Salary</td><td style='color: red;'><strong>"+bestLineup['salary']+"</strong></td>";
+
+		$("table.optimal-lineup > tbody:last").append(htmlOptimalLineup);
+
+		return false;	
 	});
 });

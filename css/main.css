@@ -34,3 +34,7 @@ td, th {
 tr.top-play {
 	text-decoration: line-through;
 }
+
+button.solver {
+	margin-top: 10px;
+}
