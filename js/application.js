@@ -169,11 +169,30 @@ $(document).ready(function() {
 		var solverCount = 0;
 		var bestLineup = {
 			salary: totalSalary,
-			lineup: changeTracker
+			changeTracker: changeTracker,
+			lineup: [
+				sortedSalaries["P"][changeTracker[0][1]],
+				sortedSalaries["C"][changeTracker[1][1]],
+				sortedSalaries["1B"][changeTracker[2][1]],
+				sortedSalaries["2B"][changeTracker[3][1]],
+				sortedSalaries["3B"][changeTracker[4][1]],
+				sortedSalaries["SS"][changeTracker[5][1]],
+				sortedSalaries["OF"][changeTracker[6][1]],
+				sortedSalaries["OF"][changeTracker[7][1]],
+				sortedSalaries["OF"][changeTracker[8][1]]
+			]
 		};
 
 		if (diff * -1 > 300) { 
-			for (var i = 0; i < 500; i++) {
+			for (var i = 0; i < 2000; i++) {
+				var random = Math.floor(Math.random()*2) + 1;
+
+				if (random == 1) {
+					if (positionCount <= 4) {
+						positionCount++;
+					}
+				}
+
 				if (positionCount >= 6) {
 					changeTracker[positionCount][1] += 3;
 				} else {
@@ -209,7 +228,18 @@ $(document).ready(function() {
 					if (totalSalary > bestLineup['salary'] && totalSalary <= 35000) {
 						bestLineup = {
 							salary: totalSalary,
-							lineup: changeTracker
+							changeTracker: changeTracker,
+							lineup: [
+								sortedSalaries["P"][changeTracker[0][1]],
+								sortedSalaries["C"][changeTracker[1][1]],
+								sortedSalaries["1B"][changeTracker[2][1]],
+								sortedSalaries["2B"][changeTracker[3][1]],
+								sortedSalaries["3B"][changeTracker[4][1]],
+								sortedSalaries["SS"][changeTracker[5][1]],
+								sortedSalaries["OF"][changeTracker[6][1]],
+								sortedSalaries["OF"][changeTracker[7][1]],
+								sortedSalaries["OF"][changeTracker[8][1]]
+							]
 						};	
 					}
 
@@ -217,7 +247,7 @@ $(document).ready(function() {
 						console.log("We have a winner.");
 						console.log(bestLineup);
 						
-						break;	
+						return false;	
 					}
 
 					if (totalSalary > 35000) {
@@ -228,18 +258,15 @@ $(document).ready(function() {
 						} else {
 							changeTracker[positionCount][1] -= 3;
 
-							if (solverCount > 6) {
-								console.log("We don't have a winner.");
-								console.log(bestLineup);
-
-								break;							
+							if (solverCount >= 6) {
+								solverCount = 0;
 							}
 
 							positionCount = solverCount;
 							solverCount++;
 
 							if (changeTracker[positionCount][1] > 0) {
-								changeTracker[positionCount][1] -= 2;
+								changeTracker[positionCount][1]--;
 							} else {
 								changeTracker[positionCount][1] = 0;
 							}
@@ -253,5 +280,8 @@ $(document).ready(function() {
 
 			return false;
 		}
+
+		console.log("We don't have a winner.");
+		console.log(bestLineup);
 	});
 });
