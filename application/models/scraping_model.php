@@ -8,6 +8,7 @@ class scraping_model extends CI_Model {
 
 	public function scrape_fd_salaries($form_data, $today_year) {
 		$url = $form_data['url'];
+		$time = $form_data['league_time'];
 
 		$this->load->helper('phpquery');
 
@@ -23,14 +24,23 @@ class scraping_model extends CI_Model {
 
 		$date = date('Y-m-d', strtotime($month_and_day.', '.$today_year));
 
-		$sql = 'SELECT `date` FROM `fstats_fd` WHERE `date` = :date';
+		$sql = 'SELECT `date`, `time` FROM `league` WHERE `date` = :date AND `time` = :time';
 		$s = $this->db->conn_id->prepare($sql);
 		$s->bindValue(':date', $date);
+		$s->bindValue(':time', $time);
 		$s->execute(); 	
 
 		$result = $s->fetchAll(PDO::FETCH_COLUMN);	
 
 		if (empty($result)) {
+			$sql = 'INSERT INTO `league`(`date`, `time`) VALUES (:date, :time)';
+			$s = $this->db->conn_id->prepare($sql);
+			$s->bindValue(':date', $date);
+			$s->bindValue(':time', $time);
+			$s->execute(); 
+
+			$league_id = $this->db->conn_id->lastInsertId();
+
 			$result = $html->find('tr[data-role=player]');
 			$num_players = count($result);
 
@@ -70,7 +80,7 @@ class scraping_model extends CI_Model {
 												`opponent`,
 												`num_games`,
 												`fppg`,
-												`date`) 
+												`league_id`) 
 						VALUES (:name, 
 								:team, 
 								:position,
@@ -78,7 +88,7 @@ class scraping_model extends CI_Model {
 								:opponent,
 								:num_games,
 								:fppg,
-								:date)'; 
+								:league_id)'; 
 				$s = $this->db->conn_id->prepare($sql);
 				$s->bindValue(':name', $value['name']);
 				$s->bindValue(':team', $value['team']);
@@ -87,7 +97,7 @@ class scraping_model extends CI_Model {
 				$s->bindValue(':opponent', $value['opponent']);
 				$s->bindValue(':num_games', $value['num_games']);
 				$s->bindValue(':fppg', $value['fppg']);
-				$s->bindValue(':date', $date);
+				$s->bindValue(':league_id', $league_id);
 				$s->execute(); 
 			}				
 

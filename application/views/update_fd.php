@@ -14,6 +14,17 @@
 					        <?php echo form_error('url'); ?>
 						</p>
 
+						<p class="league-time">
+							<input type="radio" name="league-time" id="all-day" value="all-day"> All Day
+						</p>
+						<p class="league-time">
+							<input type="radio" name="league-time" id="early" value="early"> Early
+						</p>
+						<p class="league-time">
+							<input type="radio" name="league-time" id="late" value="late"> Late
+							<?php echo '<br>'.form_error('league-time'); ?>
+						</p>
+
 						<p>
 					        <br>
 					        <?php echo form_submit( 'submit', 'Submit'); ?>

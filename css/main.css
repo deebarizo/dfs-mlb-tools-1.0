@@ -38,3 +38,8 @@ tr.top-play {
 button.solver {
 	margin-top: 10px;
 }
+
+p.league-time {
+	margin: 0;
+	padding: 0;
+}

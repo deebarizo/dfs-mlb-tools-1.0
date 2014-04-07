@@ -20,6 +20,7 @@ class Update extends CI_Controller {
 		$today_year = $this->today_year;
 
 		$this->form_validation->set_rules('url', 'URL', 'required|trim');
+		$this->form_validation->set_rules('league-time', 'League Time', 'required');
 
 		$this->form_validation->set_error_delimiters('<br /><span style="color:red" class="error">', '</span>');
 
@@ -27,7 +28,8 @@ class Update extends CI_Controller {
 			$data['message'] = 'Form validation error.';
 		} else {
 			$form_data = array(
-				'url' => set_value('url')
+				'url' => set_value('url'),
+				'league_time' => set_value('league-time')
 			);
 
 			$this->load->model('scraping_model');
