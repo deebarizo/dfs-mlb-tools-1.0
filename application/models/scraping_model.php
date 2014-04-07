@@ -22,6 +22,10 @@ class scraping_model extends CI_Model {
 			$month_and_day = preg_replace("/(.+)(\w\w\w\s\d+)(\w\w\s\(\w+\))/", "$2", $h1_tag_with_date);
 		}
 
+		if ($month_and_day == $h1_tag_with_date) {
+			$month_and_day = preg_replace("/(.+)(\w\w\w\s\d+)(\w\w\s\(Early Only\))/", "$2", $h1_tag_with_date);
+		}
+
 		$date = date('Y-m-d', strtotime($month_and_day.', '.$today_year));
 
 		$sql = 'SELECT `date`, `time` FROM `league` WHERE `date` = :date AND `time` = :time';
