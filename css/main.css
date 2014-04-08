@@ -43,3 +43,7 @@ p.league-time {
 	margin: 0;
 	padding: 0;
 }
+
+table.leagues {
+	width: 270px;
+}

@@ -3,7 +3,7 @@
 				<div class="col col-left">
 		      		<h3><?php echo $subhead; ?></h3>
 		  
-					<table class="salaries">
+					<table class="leagues">
 						<thead>
 							<tr>
 								<th data-sort='string'>Date (Time)</th>
