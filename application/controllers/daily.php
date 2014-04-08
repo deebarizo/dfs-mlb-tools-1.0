@@ -9,22 +9,39 @@ class Daily extends CI_Controller {
 
 	public function fd($date = 'empty', $time = 'empty') {
 		if ($date == 'empty' AND $time == 'empty') {
-			echo 'bob';
+			$data['page_type'] = 'Recent Daily FD Leagues';
+			$data['page_title'] = 'Recent Daily FD Leagues';
+			$data['subhead'] = 'Recent Daily FD Leagues';
+
+			$sql = 'SELECT `date`, `time`
+					FROM league
+					ORDER BY `date` DESC, `time` DESC
+					LIMIT 5';
+			$s = $this->db->conn_id->prepare($sql);
+			$s->bindValue(':date', $date);
+			$s->bindValue(':time', $time);
+			$s->execute(); 
+
+			$data['league'] = $s->fetchAll(PDO::FETCH_ASSOC);
+
+			foreach ($data['league'] as $key => &$value) {
+				$value['capitalized_time'] = $this->capitalize_time($value['time']);
+			}
+
+			unset($value);
+
+			# echo '<pre>';
+			# var_dump($league);
+			# echo '</pre>'; exit();
+
+			$this->load->view('templates/header', $data);
+			$this->load->view('daily_fd', $data);
+			$this->load->view('templates/footer');
 
 			return false;
 		}
 
-		switch ($time) {
-			case 'all-day':
-				$capitalized_time = 'All Day';
-				break;
-			case 'early':
-				$capitalized_time = 'Early';
-				break;
-			case 'late':
-				$capitalized_time = 'Late';
-				break;
-		}
+		$capitalized_time = $this->capitalize_time($time);
 
 		$data['page_type'] = 'Daily';
 		$data['page_title'] = 'Daily - '.$date.' - DFS MLB Tools';
@@ -56,5 +73,16 @@ class Daily extends CI_Controller {
 		$this->load->view('templates/header', $data);
 		$this->load->view('daily_fd_salaries', $data);
 		$this->load->view('templates/footer');
+	}
+
+	public function capitalize_time($time) {
+		switch ($time) {
+			case 'all-day':
+				return 'All Day';
+			case 'early':
+				return 'Early';
+			case 'late':
+				return 'Late';
+		}
 	}
 }
