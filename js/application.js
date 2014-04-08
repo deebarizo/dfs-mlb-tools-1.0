@@ -135,6 +135,7 @@ $(document).ready(function() {
 		    });
 		};		
 
+		console.log("sortedSalaries");
 		console.log(sortedSalaries);
 
 		var totalSalary = sortedSalaries["P"][0][4] + 
@@ -150,11 +151,10 @@ $(document).ready(function() {
 		var diff = totalSalary - 35000;
 
 		if (totalSalary > 35000) {
-			alert("Optimal lineup is above the salary cap by $"+diff+".");
+			alert("The cheapest lineup is above the salary cap by $"+diff+".");
 			return false;
 		}
 
-		var positionCount = 0;
 		var changeTracker = [
 			["P", 0], 
 			["C", 0], 
@@ -166,10 +166,9 @@ $(document).ready(function() {
 			["OF", 1], 
 			["OF", 2]
 		];
-		var solverCount = 0;
+
 		var bestLineup = {
 			salary: totalSalary,
-			changeTracker: changeTracker,
 			lineup: [
 				sortedSalaries["P"][changeTracker[0][1]],
 				sortedSalaries["C"][changeTracker[1][1]],
@@ -183,138 +182,61 @@ $(document).ready(function() {
 			]
 		};
 
+		var randomNumber;
+
+		console.log("changeTracker");
+		console.log(changeTracker);
+
 		if (diff * -1 > 300) { 
-			for (var i = 0; i < 2000; i++) {
-				var random = Math.floor(Math.random()*2) + 1;
+			$('button.solver').prop('disabled', true);
+			$('button.solver').text('Solving...');
 
-				if (random == 1) {
-					if (positionCount <= 4) {
-						positionCount++;
-					}
-				}
+			for (var i = 0; i < 10000; i++) {
+				randomNumber = Math.floor(Math.random()*sortedSalaries["P"].length) + 1;
+				changeTracker[0][1] = randomNumber;
 
-				if (positionCount >= 6) {
-					changeTracker[positionCount][1] += 3;
-				} else {
-					changeTracker[positionCount][1]++;
-				}
+				randomNumber = Math.floor(Math.random()*sortedSalaries["C"].length) + 1;
+				changeTracker[0][2] = randomNumber;
 
-				console.log("changeTracker: "+changeTracker);
-				console.log("positionCount: "+positionCount);
+				randomNumber = Math.floor(Math.random()*sortedSalaries["1B"].length) + 1;
+				changeTracker[0][3] = randomNumber;
 
-				if (typeof sortedSalaries[changeTracker[positionCount][0]][changeTracker[positionCount][1]] == "undefined") {
-					if (positionCount <= 5) {
-						changeTracker[positionCount][1]--;
+				randomNumber = Math.floor(Math.random()*sortedSalaries["2B"].length) + 1;
+				changeTracker[0][4] = randomNumber;
 
-						positionCount++;
-					} else {
-						changeTracker[positionCount][1] -= 3;
+				randomNumber = Math.floor(Math.random()*sortedSalaries["3B"].length) + 1;
+				changeTracker[0][5] = randomNumber;
 
-						positionCount = 0;
-					}
+				randomNumber = Math.floor(Math.random()*sortedSalaries["SS"].length) + 1;
+				changeTracker[0][6] = randomNumber;
 
-					
-				} else {
-					totalSalary = sortedSalaries["P"][changeTracker[0][1]][4] + 
-								  sortedSalaries["C"][changeTracker[1][1]][4] + 
-								  sortedSalaries["1B"][changeTracker[2][1]][4] + 
-								  sortedSalaries["2B"][changeTracker[3][1]][4] + 
-								  sortedSalaries["3B"][changeTracker[4][1]][4] + 
-								  sortedSalaries["SS"][changeTracker[5][1]][4] + 
-								  sortedSalaries["OF"][changeTracker[6][1]][4] + 
-								  sortedSalaries["OF"][changeTracker[7][1]][4] + 
-								  sortedSalaries["OF"][changeTracker[8][1]][4];
+				randomNumber = Math.floor(Math.random()*sortedSalaries["OF"].length) + 1;
+				changeTracker[0][7] = randomNumber;
 
-					diff = totalSalary - 35000;
+				do {
+					randomNumber = Math.floor(Math.random()*sortedSalaries["OF"].length) + 1;
+				} while (randomNumber != changeTracker[0][7]);
+				changeTracker[0][8] = randomNumber;		
 
-					console.log(totalSalary);
+				do {
+					randomNumber = Math.floor(Math.random()*sortedSalaries["OF"].length) + 1;
+				} while (randomNumber != changeTracker[0][7] && randomNumber != changeTracker[0][8]);
+				changeTracker[0][9] = randomNumber;			
 
-					if (totalSalary > bestLineup['salary'] && totalSalary <= 35000) {
-						bestLineup = {
-							salary: totalSalary,
-							changeTracker: changeTracker,
-							lineup: [
-								sortedSalaries["P"][changeTracker[0][1]],
-								sortedSalaries["C"][changeTracker[1][1]],
-								sortedSalaries["1B"][changeTracker[2][1]],
-								sortedSalaries["2B"][changeTracker[3][1]],
-								sortedSalaries["3B"][changeTracker[4][1]],
-								sortedSalaries["SS"][changeTracker[5][1]],
-								sortedSalaries["OF"][changeTracker[6][1]],
-								sortedSalaries["OF"][changeTracker[7][1]],
-								sortedSalaries["OF"][changeTracker[8][1]]
-							]
-						};	
-					}
-
-					if (diff * -1 <= 300 && totalSalary <= 35000) {
-						$("table.optimal-lineup > tbody > tr").remove();
-
-						var htmlOptimalLineup;
-
-						for (var i = 0; i < bestLineup['lineup'].length; i++) {
-							htmlOptimalLineup += "<tr>";
-
-							for (var n = 0; n < bestLineup['lineup'][i].length; n++) {
-								htmlOptimalLineup += "<td>"+bestLineup['lineup'][i][n]+"</td>";
-							};
-
-							htmlOptimalLineup += "</tr>";
-						};
-
-						htmlOptimalLineup += "<td colspan='4'>Total Salary</td><td><strong>"+bestLineup['salary']+"</strong></td>";
-
-						$("table.optimal-lineup > tbody:last").append(htmlOptimalLineup);
-
-						return false;	
-					}
-
-					if (totalSalary > 35000) {
-						if (positionCount <= 5) {
-							changeTracker[positionCount][1]--;
-
-							positionCount++;
-						} else {
-							changeTracker[positionCount][1] -= 3;
-
-							if (solverCount >= 6) {
-								solverCount = 0;
-							}
-
-							positionCount = solverCount;
-							solverCount++;
-
-							if (changeTracker[positionCount][1] > 0) {
-								changeTracker[positionCount][1]--;
-							} else {
-								changeTracker[positionCount][1] = 0;
-							}
-						}
-					}	
-				}
-			}		
-		} else {
-			$("table.optimal-lineup > tbody > tr").remove();
-
-			var htmlOptimalLineup;
-
-			for (var i = 0; i < bestLineup['lineup'].length; i++) {
-				htmlOptimalLineup += "<tr>";
-
-				for (var n = 0; n < bestLineup['lineup'][i].length; n++) {
-					htmlOptimalLineup += "<td>"+bestLineup['lineup'][i][n]+"</td>";
-				};
-
-				htmlOptimalLineup += "</tr>";
+				
 			};
 
-			htmlOptimalLineup += "<td colspan='4'>Total Salary</td><td><strong>"+bestLineup['salary']+"</strong></td>";
+			showOptimalLineup(bestLineup, "bad");
 
-			$("table.optimal-lineup > tbody:last").append(htmlOptimalLineup);
+			return false;			
+		} else {
+			showOptimalLineup(bestLineup, "good");
 
 			return false;	
 		}
+	});
 
+	function showOptimalLineup(bestLineup, unspentToggle) {
 		$("table.optimal-lineup > tbody > tr").remove();
 
 		var htmlOptimalLineup;
@@ -329,10 +251,17 @@ $(document).ready(function() {
 			htmlOptimalLineup += "</tr>";
 		};
 
-		htmlOptimalLineup += "<td colspan='4'>Total Salary</td><td style='color: red;'><strong>"+bestLineup['salary']+"</strong></td>";
+		if (unspentToggle == "bad") {
+			var color = "<td style='color: red;'>";
+		} else if (unspentToggle == "good") {
+			var color = "<td style='color: green;'>";
+		}
+
+		htmlOptimalLineup += "<td colspan='4'>Total Salary</td>"+color+"<strong>"+bestLineup['salary']+"</strong></td>";
 
 		$("table.optimal-lineup > tbody:last").append(htmlOptimalLineup);
 
-		return false;	
-	});
+		$('button.solver').prop('disabled', false);
+		$('button.solver').text('Solve');
+	}
 });
