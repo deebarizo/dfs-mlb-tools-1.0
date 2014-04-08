@@ -23,13 +23,13 @@
 							<tbody>
 								<?php foreach ($fstats_fd as $key => $value) { ?>
 		 							<tr class="player" data-index="<?php echo $key; ?>">
-										<td><?php echo $value['position']; ?></td>
-										<td><?php echo $value['name']; ?></td>
-										<td><?php echo $value['fppg']; ?></td>
-										<td><?php echo $value['num_games']; ?></td>
-										<td><?php echo $value['team']; ?></td>
-										<td><?php echo $value['opponent']; ?></td>
-										<td><?php echo $value['salary']; ?></td>
+										<td class="position"><?php echo $value['position']; ?></td>
+										<td class="name"><?php echo $value['name']; ?></td>
+										<td class="fppg"><?php echo $value['fppg']; ?></td>
+										<td class="num-games"><?php echo $value['num_games']; ?></td>
+										<td class="team"><?php echo $value['team']; ?></td>
+										<td class="opponent"><?php echo $value['opponent']; ?></td>
+										<td class="salary"><?php echo $value['salary']; ?></td>
 									</tr>
 								<?php } ?>
 							</tbody>
@@ -39,6 +39,8 @@
 
 				<div class="col col-mid">
 		      		<h3>Top Plays</h3>
+
+		      		<button type="button" class="save-top-plays">Save</button> <span class="save-top-plays-confirmation">These top plays were saved.</span>
 		  
 					<table class="top-plays">
 						<thead>

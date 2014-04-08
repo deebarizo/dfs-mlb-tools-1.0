@@ -44,11 +44,50 @@ $(document).ready(function() {
 	});
 
 	function topPlayCheck() {
-		var topPlayCheck = $(".top-play").length;
+		var topPlayCheck = $("table.top-plays tr[data-index]").length;
+
 		if (topPlayCheck == 0) {
 			$("td.no-top-plays").show();
 		} 		
 	}
+
+	$("button.save-top-plays").click(function() {
+		var topPlays = [];
+		var playerData = [];
+
+		$("table.top-plays tr[data-index]").each(function(index) {
+			playerData = $(this).children();
+
+		    topPlays.push({
+		    	dataIndex: $(this).data("index"),
+		    	position: $(playerData[0]).text(),
+		    	name: $(playerData[1]).text(),
+		    	fppg: $(playerData[2]).text(),
+		    	num_games: $(playerData[3]).text(),
+		    	team: $(playerData[4]).text(),
+		    	opponent: $(playerData[5]).text(),
+		    	salary: $(playerData[6]).text()
+		    });
+		});
+
+		console.log("topPlays");
+		console.log(topPlays);
+/*
+    	$.ajax({
+            url: 'http://localhost/dfsnbatools/daily/get_team_dvp/'+opposing_team+'/'+chosen_date,
+            type: 'POST',
+            dataType: 'json',
+            success: function(dvp) {		
+       	      	$("."+location_class).html('<table class="inside-box"><tr><th>Opponent DvP</th><th>PG</th><th>PG-Mod</th><th>SG</th><th>SG-Mod</th><th>SF</th><th>SF-Mod</th><th>PF</th><th>PF-Mod</th><th>C</th><th>C-Mod</th></tr><tr><td>'+dvp[0].name_dvp+'</td><td class="rank">'+dvp[0].pg_rank+'</td><td>'+dvp[0].pg_rank_mod+'</td><td class="rank">'+dvp[0].sg_rank+'</td><td>'+dvp[0].sg_rank_mod+'</td><td class="rank">'+dvp[0].sf_rank+'</td><td>'+dvp[0].sf_rank_mod+'</td><td class="rank">'+dvp[0].pf_rank+'</td><td>'+dvp[0].pf_rank_mod+'</td><td class="rank">'+dvp[0].c_rank+'</td><td>'+dvp[0].c_rank_mod+'</td></tr></table>');
+            }
+        });
+*/
+		$("span.save-top-plays-confirmation").show();
+
+		setTimeout(function() {
+			$("span.save-top-plays-confirmation").fadeOut("slow");
+		}, 2000);
+	});
 
 	$("button.solver").click(function() {
 		var topPlays = [];

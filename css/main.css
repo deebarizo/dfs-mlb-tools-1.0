@@ -35,6 +35,17 @@ tr.top-play {
 	text-decoration: line-through;
 }
 
+button.save-top-plays {
+	margin-bottom: 10px;
+}
+
+span.save-top-plays-confirmation {
+	font-size: 0.75em;
+	color: green;
+	margin-left: 5px;
+	display: none;
+}
+
 button.solver {
 	margin-top: 10px;
 }
