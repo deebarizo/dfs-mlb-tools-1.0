@@ -70,16 +70,17 @@ $(document).ready(function() {
 		    });
 		});
 
-		console.log("topPlays");
-		console.log(topPlays);
+		if (topPlays.length == 0) {
+			topPlays = "empty";
+		}
 
 		var leagueID = $("table.salaries").data("id");
 
     	$.ajax({
             url: 'http://localhost/dfsmlbtools/daily/update_top_plays/'+leagueID,
             type: 'POST',
-            data: topPlays,
-            success: function() { 		
+            data: { topPlays: topPlays },
+            success: function() {
 				$("span.save-top-plays-confirmation").show();
 
 				setTimeout(function() {

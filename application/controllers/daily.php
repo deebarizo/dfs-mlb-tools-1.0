@@ -76,12 +76,28 @@ class Daily extends CI_Controller {
 	}
 
 	public function update_top_plays($league_id) {
-		$top_plays = $this->input->post('data');
+		$top_plays = $this->input->post("topPlays");
 
-		$sql = 'UPDATE `fstats_fd` SET `top_play_index` = 1 WHERE id = 1';
+		$sql = 'UPDATE `fstats_fd` SET `top_play_index` = NULL WHERE league_id = :league_id';
 		$s = $this->db->conn_id->prepare($sql);
 		$s->bindValue(':league_id', $league_id);
-		$s->execute();
+		$s->execute(); 	
+
+		if ($top_plays != "empty") {
+			foreach ($top_plays as $key => $value) {
+				$sql = 'UPDATE fstats_fd 
+						SET top_play_index = :top_play_index 
+						WHERE league_id = :league_id
+							AND name = :name
+							AND salary = :salary';
+				$s = $this->db->conn_id->prepare($sql);
+				$s->bindValue(':top_play_index', $value['dataIndex']);
+				$s->bindValue(':league_id', $league_id);
+				$s->bindValue(':name', $value['name']);
+				$s->bindValue(':salary', $value['salary']);
+				$s->execute(); 				
+			}
+		}
 	}
 
 	public function capitalize_time($time) {
