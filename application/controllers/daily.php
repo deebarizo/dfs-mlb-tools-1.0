@@ -63,9 +63,14 @@ class Daily extends CI_Controller {
 			$s->bindValue(':league_id', $league_id);
 			$s->execute(); 	
 
-			$fstats_fd = $s->fetchAll(PDO::FETCH_ASSOC);
+			$data['fstats_fd'] = $s->fetchAll(PDO::FETCH_ASSOC);
 
-			$data['fstats_fd'] = $fstats_fd;
+			$sql = 'SELECT * FROM `fstats_fd` WHERE `league_id` = :league_id AND top_play_index IS NOT NULL';
+			$s = $this->db->conn_id->prepare($sql);
+			$s->bindValue(':league_id', $league_id);
+			$s->execute(); 	
+
+			$data['top_plays'] = $s->fetchAll(PDO::FETCH_ASSOC);
 		} else {
 			$data['error'] = "The FD salaries are missing.";
 		}		

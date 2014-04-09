@@ -22,7 +22,14 @@
 							</thead>
 							<tbody>
 								<?php foreach ($fstats_fd as $key => $value) { ?>
-		 							<tr class="player" data-index="<?php echo $key; ?>">
+									<?php 
+										if (is_null($value['top_play_index'])) {
+											$toggle_top_play = "";
+										} else {
+											$toggle_top_play = " top-play";
+										}
+									?>
+		 							<tr class="player<?php echo $toggle_top_play; ?>" data-index="<?php echo $key; ?>">
 										<td class="position"><?php echo $value['position']; ?></td>
 										<td class="name"><?php echo $value['name']; ?></td>
 										<td class="fppg"><?php echo $value['fppg']; ?></td>
@@ -55,16 +62,37 @@
 							</tr>
 						</thead>
 						<tbody>
+							<?php 
+								if (empty($top_plays)) {
+									$toggle_top_plays = "";
+								} else {
+									$toggle_top_plays = ' style="display: none;"';
+								}
+							?>
  							<tr>
-								<td class="no-top-plays" colspan="7" style="display: none;">No plays yet.</td>
+								<td class="no-top-plays" colspan="7"<?php echo $toggle_top_plays; ?>>No plays yet.</td>
 							</tr>
-							<tr data-index="9"><td>P</td><td>Gio Gonzalez</td><td>15.0</td><td>1</td><td>WAS</td><td>MIA</td><td>8300</td></tr>
+							<?php if (empty($top_plays) == false) { ?>
+								<?php foreach ($top_plays as $key => $value) { ?>
+									<tr data-index="<?php echo $value['top_play_index']; ?>">
+										<td><?php echo $value['position']; ?></td>
+										<td><?php echo $value['name']; ?></td>
+										<td><?php echo $value['fppg']; ?></td>
+										<td><?php echo $value['num_games']; ?></td>
+										<td><?php echo $value['team']; ?></td>
+										<td><?php echo $value['opponent']; ?></td>
+										<td><?php echo $value['salary']; ?></td>
+									</tr>
+								<?php } ?>
+							<?php } ?>
 						</tbody>
 					</table>
 				</div>
 
 				<div class="col col-right">
 		      		<h3>Optimal Lineup</h3>
+
+		      		<button type="button" class="solver">Solve</button>
 
 					<table class="optimal-lineup">
 						<thead>
@@ -82,7 +110,5 @@
 							</tr>
 						</tbody>
 					</table>
-
-					<button type="button" class="solver">Solve</button>
 				</div>
 			</section>
