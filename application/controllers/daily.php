@@ -75,6 +75,15 @@ class Daily extends CI_Controller {
 		$this->load->view('templates/footer');
 	}
 
+	public function update_top_plays($league_id) {
+		$top_plays = $this->input->post('data');
+
+		$sql = 'UPDATE `fstats_fd` SET `top_play_index` = 1 WHERE id = 1';
+		$s = $this->db->conn_id->prepare($sql);
+		$s->bindValue(':league_id', $league_id);
+		$s->execute();
+	}
+
 	public function capitalize_time($time) {
 		switch ($time) {
 			case 'all-day':

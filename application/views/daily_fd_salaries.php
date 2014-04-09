@@ -8,7 +8,7 @@
 		      		<?php } ?>
 		
 					<?php if (isset($fstats_fd)) { ?>
-						<table class="salaries">
+						<table class="salaries" data-id="<?php echo $fstats_fd[0]['league_id']; ?>">
 							<thead>
 								<tr>
 									<th data-sort='string'>Pos</th>

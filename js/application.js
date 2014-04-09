@@ -72,21 +72,21 @@ $(document).ready(function() {
 
 		console.log("topPlays");
 		console.log(topPlays);
-/*
+
+		var leagueID = $("table.salaries").data("id");
+
     	$.ajax({
-            url: 'http://localhost/dfsnbatools/daily/get_team_dvp/'+opposing_team+'/'+chosen_date,
+            url: 'http://localhost/dfsmlbtools/daily/update_top_plays/'+leagueID,
             type: 'POST',
-            dataType: 'json',
-            success: function(dvp) {		
-       	      	$("."+location_class).html('<table class="inside-box"><tr><th>Opponent DvP</th><th>PG</th><th>PG-Mod</th><th>SG</th><th>SG-Mod</th><th>SF</th><th>SF-Mod</th><th>PF</th><th>PF-Mod</th><th>C</th><th>C-Mod</th></tr><tr><td>'+dvp[0].name_dvp+'</td><td class="rank">'+dvp[0].pg_rank+'</td><td>'+dvp[0].pg_rank_mod+'</td><td class="rank">'+dvp[0].sg_rank+'</td><td>'+dvp[0].sg_rank_mod+'</td><td class="rank">'+dvp[0].sf_rank+'</td><td>'+dvp[0].sf_rank_mod+'</td><td class="rank">'+dvp[0].pf_rank+'</td><td>'+dvp[0].pf_rank_mod+'</td><td class="rank">'+dvp[0].c_rank+'</td><td>'+dvp[0].c_rank_mod+'</td></tr></table>');
+            data: topPlays,
+            success: function() { 		
+				$("span.save-top-plays-confirmation").show();
+
+				setTimeout(function() {
+					$("span.save-top-plays-confirmation").fadeOut("slow");
+				}, 2000);
             }
         });
-*/
-		$("span.save-top-plays-confirmation").show();
-
-		setTimeout(function() {
-			$("span.save-top-plays-confirmation").fadeOut("slow");
-		}, 2000);
 	});
 
 	$("button.solver").click(function() {
