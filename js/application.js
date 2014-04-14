@@ -204,8 +204,29 @@ $(document).ready(function() {
 			["OF", 2]
 		];
 
-		var bestLineup = {
+		var lineupID = changeTracker[0][1] +
+					   changeTracker[1][1] +
+					   changeTracker[2][1] +
+					   changeTracker[3][1] +
+					   changeTracker[4][1] +
+					   changeTracker[5][1] +
+					   changeTracker[6][1] +
+					   changeTracker[7][1] +
+					   changeTracker[8][1];
+
+		lineupID = parseInt(lineupID);
+
+		outfielders = [
+			changeTracker[6][1],
+			changeTracker[7][1],
+			changeTracker[8][1]
+		];
+
+		var bestLineups = [{
 			salary: totalSalary,
+			lineupID: lineupID,
+			outfielders: outfielders,
+			changeTracker: changeTracker,
 			lineup: [
 				sortedSalaries["P"][changeTracker[0][1]],
 				sortedSalaries["C"][changeTracker[1][1]],
@@ -217,16 +238,14 @@ $(document).ready(function() {
 				sortedSalaries["OF"][changeTracker[7][1]],
 				sortedSalaries["OF"][changeTracker[8][1]]
 			]
-		};
-
-		var randomNumber;
+		}];
 
 		$('button.solver').prop('disabled', true);
 		$('button.solver').text('Solving...');
 
-		if (diff != 0) { 
+		setTimeout(function() {
 			for (var i = 0; i < 10000; i++) {
-				randomNumber = Math.floor(Math.random()*sortedSalaries["P"].length);
+				var randomNumber = Math.floor(Math.random()*sortedSalaries["P"].length);
 				changeTracker[0][1] = randomNumber;
 
 				randomNumber = Math.floor(Math.random()*sortedSalaries["C"].length);
@@ -267,42 +286,73 @@ $(document).ready(function() {
 							  sortedSalaries["OF"][changeTracker[7][1]][4] + 
 							  sortedSalaries["OF"][changeTracker[8][1]][4];
 
-				diff = totalSalary - 35000;
+				lineupID = changeTracker[0][1].toString() +
+							   changeTracker[1][1].toString() +
+							   changeTracker[2][1].toString() +
+							   changeTracker[3][1].toString() +
+							   changeTracker[4][1].toString() +
+							   changeTracker[5][1].toString() +
+							   changeTracker[6][1].toString() +
+							   changeTracker[7][1].toString() +
+							   changeTracker[8][1].toString();
 
-				if (totalSalary > bestLineup['salary'] && totalSalary <= 35000) {
-					bestLineup = {
-						salary: totalSalary,
-						changeTracker: changeTracker,
-						lineup: [
-							sortedSalaries["P"][changeTracker[0][1]],
-							sortedSalaries["C"][changeTracker[1][1]],
-							sortedSalaries["1B"][changeTracker[2][1]],
-							sortedSalaries["2B"][changeTracker[3][1]],
-							sortedSalaries["3B"][changeTracker[4][1]],
-							sortedSalaries["SS"][changeTracker[5][1]],
-							sortedSalaries["OF"][changeTracker[6][1]],
-							sortedSalaries["OF"][changeTracker[7][1]],
-							sortedSalaries["OF"][changeTracker[8][1]]
-						]
-					};	
+				lineupID = parseInt(lineupID);
+
+				outfielders = [
+					changeTracker[6][1],
+					changeTracker[7][1],
+					changeTracker[8][1]
+				];
+
+				if (totalSalary <= 35000) {
+					var repeatLineup = false;
+
+					for (var i = 0; i < bestLineups.length; i++) {
+						if (lineupID == bestLineups[i]["lineupID"]) {
+							repeatLineup = true;
+							break;
+						} 
+
+						var sameOutfielders = false;
+					};
+
+					if (repeatLineup == false) {
+						var eligibleLineup = {
+							salary: totalSalary,
+							lineupID: lineupID,
+							outfielders: outfielders,
+							changeTracker: changeTracker,
+							lineup: [
+								sortedSalaries["P"][changeTracker[0][1]],
+								sortedSalaries["C"][changeTracker[1][1]],
+								sortedSalaries["1B"][changeTracker[2][1]],
+								sortedSalaries["2B"][changeTracker[3][1]],
+								sortedSalaries["3B"][changeTracker[4][1]],
+								sortedSalaries["SS"][changeTracker[5][1]],
+								sortedSalaries["OF"][changeTracker[6][1]],
+								sortedSalaries["OF"][changeTracker[7][1]],
+								sortedSalaries["OF"][changeTracker[8][1]]
+							]
+						};	
+
+						bestLineups.push(eligibleLineup);					
+					}
 				}
 			};
 
-			if (bestLineup['salary'] >= 34700) {
-				unspentToggle = "good";
-			} else {
-				unspentToggle = "bad";
-			}
+			// console.log(bestLineups[1]); return false;
 
-			showOptimalLineup(bestLineup, unspentToggle);
+			bestLineups.sort(function(a,b) {
+			   	return b['salary'] - a['salary'];
+		    });
 
-			return false;			
-		} else {
-			unspentToggle = "good";
-			showOptimalLineup(bestLineup, unspentToggle);
+		    bestLineups = bestLineups.slice(0, 10);
 
-			return false;	
-		}
+			console.log(bestLineups);
+
+			$('button.solver').prop('disabled', false);
+			$('button.solver').text('Solve');
+		}, 1500);
 	});
 
 	function showOptimalLineup(bestLineup, unspentToggle) {
