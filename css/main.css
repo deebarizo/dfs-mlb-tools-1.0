@@ -13,22 +13,29 @@ td, th {
 }
 
 .col-wrapper {
-	width: 1530px;	
+	width: 1024px;	
 }
 
-.col {
-	width: 470px; 
+div.salaries,
+div.top-plays,
+div.optimal-lineups {
+	width: 472px; 
 	margin: 0 10px; 
 	padding: 10px;
 }
 
-.col-left,
-.col-mid {
+div.salaries {
 	float: left;
+	margin-bottom: 30px;
 }
 
-.col-right {
+div.top-plays {
 	float: right;
+}
+
+div.salaries-table-container {
+	overflow: auto;
+	height: 540px;
 }
 
 tr.top-play {
