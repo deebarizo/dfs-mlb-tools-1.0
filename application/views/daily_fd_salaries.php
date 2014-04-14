@@ -51,44 +51,46 @@
 
 		      		<button type="button" class="save-top-plays">Save</button> <span class="save-top-plays-confirmation">These top plays were saved.</span>
 		  
-					<table class="top-plays">
-						<thead>
-							<tr>
-								<th data-sort='string'>Pos</th>
-								<th data-sort='string'>Name</th>
-								<th data-sort='float'>FPPG</th>
-								<th data-sort='int'>G</th>
-								<th data-sort='string'>Team</th>
-								<th data-sort='string'>Opp</th>
-								<th data-sort='string'>Salary</th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php 
-								if (empty($top_plays)) {
-									$toggle_top_plays = "";
-								} else {
-									$toggle_top_plays = ' style="display: none;"';
-								}
-							?>
- 							<tr>
-								<td class="no-top-plays" colspan="7"<?php echo $toggle_top_plays; ?>>No plays yet.</td>
-							</tr>
-							<?php if (empty($top_plays) == false) { ?>
-								<?php foreach ($top_plays as $key => $value) { ?>
-									<tr data-index="<?php echo $value['top_play_index']; ?>">
-										<td><?php echo $value['position']; ?></td>
-										<td><?php echo $value['name']; ?></td>
-										<td><?php echo $value['fppg']; ?></td>
-										<td><?php echo $value['num_games']; ?></td>
-										<td><?php echo $value['team']; ?></td>
-										<td><?php echo $value['opponent']; ?></td>
-										<td><?php echo $value['salary']; ?></td>
-									</tr>
+		  			<div class="top-plays-table-container">
+						<table class="top-plays">
+							<thead>
+								<tr>
+									<th data-sort='string'>Pos</th>
+									<th data-sort='string'>Name</th>
+									<th data-sort='float'>FPPG</th>
+									<th data-sort='int'>G</th>
+									<th data-sort='string'>Team</th>
+									<th data-sort='string'>Opp</th>
+									<th data-sort='string'>Salary</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php 
+									if (empty($top_plays)) {
+										$toggle_top_plays = "";
+									} else {
+										$toggle_top_plays = ' style="display: none;"';
+									}
+								?>
+	 							<tr>
+									<td class="no-top-plays" colspan="7"<?php echo $toggle_top_plays; ?>>No plays yet.</td>
+								</tr>
+								<?php if (empty($top_plays) == false) { ?>
+									<?php foreach ($top_plays as $key => $value) { ?>
+										<tr data-index="<?php echo $value['top_play_index']; ?>">
+											<td><?php echo $value['position']; ?></td>
+											<td><?php echo $value['name']; ?></td>
+											<td><?php echo $value['fppg']; ?></td>
+											<td><?php echo $value['num_games']; ?></td>
+											<td><?php echo $value['team']; ?></td>
+											<td><?php echo $value['opponent']; ?></td>
+											<td><?php echo $value['salary']; ?></td>
+										</tr>
+									<?php } ?>
 								<?php } ?>
-							<?php } ?>
-						</tbody>
-					</table>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</section>
 		</div>

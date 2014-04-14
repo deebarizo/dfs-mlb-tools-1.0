@@ -38,6 +38,11 @@ div.salaries-table-container {
 	height: 540px;
 }
 
+div.top-plays-table-container {
+	overflow: auto;
+	height: 505px;
+}
+
 tr.top-play {
 	text-decoration: line-through;
 }

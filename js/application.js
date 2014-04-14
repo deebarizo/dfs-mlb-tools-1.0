@@ -204,19 +204,17 @@ $(document).ready(function() {
 			["OF", 2]
 		];
 
-		var lineupID = changeTracker[0][1] +
-					   changeTracker[1][1] +
-					   changeTracker[2][1] +
-					   changeTracker[3][1] +
-					   changeTracker[4][1] +
-					   changeTracker[5][1] +
-					   changeTracker[6][1] +
-					   changeTracker[7][1] +
-					   changeTracker[8][1];
+		var lineupID = changeTracker[0][1].toString() + "|" + 
+				   changeTracker[1][1].toString() + "|" + 
+				   changeTracker[2][1].toString() + "|" + 
+				   changeTracker[3][1].toString() + "|" + 
+				   changeTracker[4][1].toString() + "|" + 
+				   changeTracker[5][1].toString() + "|" + 
+				   changeTracker[6][1].toString() + "|" + 
+				   changeTracker[7][1].toString() + "|" + 
+				   changeTracker[8][1].toString();
 
-		lineupID = parseInt(lineupID);
-
-		outfielders = [
+		var outfielders = [
 			changeTracker[6][1],
 			changeTracker[7][1],
 			changeTracker[8][1]
@@ -244,7 +242,7 @@ $(document).ready(function() {
 		$('button.solver').text('Solving...');
 
 		setTimeout(function() {
-			for (var i = 0; i < 10000; i++) {
+			for (var i = 0; i < 100000; i++) {
 				var randomNumber = Math.floor(Math.random()*sortedSalaries["P"].length);
 				changeTracker[0][1] = randomNumber;
 
@@ -286,17 +284,15 @@ $(document).ready(function() {
 							  sortedSalaries["OF"][changeTracker[7][1]][4] + 
 							  sortedSalaries["OF"][changeTracker[8][1]][4];
 
-				lineupID = changeTracker[0][1].toString() +
-							   changeTracker[1][1].toString() +
-							   changeTracker[2][1].toString() +
-							   changeTracker[3][1].toString() +
-							   changeTracker[4][1].toString() +
-							   changeTracker[5][1].toString() +
-							   changeTracker[6][1].toString() +
-							   changeTracker[7][1].toString() +
+				lineupID = changeTracker[0][1].toString() + "|" + 
+							   changeTracker[1][1].toString() + "|" + 
+							   changeTracker[2][1].toString() + "|" + 
+							   changeTracker[3][1].toString() + "|" + 
+							   changeTracker[4][1].toString() + "|" + 
+							   changeTracker[5][1].toString() + "|" + 
+							   changeTracker[6][1].toString() + "|" + 
+							   changeTracker[7][1].toString() + "|" + 
 							   changeTracker[8][1].toString();
-
-				lineupID = parseInt(lineupID);
 
 				outfielders = [
 					changeTracker[6][1],
@@ -307,13 +303,65 @@ $(document).ready(function() {
 				if (totalSalary <= 35000) {
 					var repeatLineup = false;
 
-					for (var i = 0; i < bestLineups.length; i++) {
-						if (lineupID == bestLineups[i]["lineupID"]) {
+					for (var n = 0; n < bestLineups.length; n++) {
+						if (lineupID == bestLineups[n]["lineupID"]) {
 							repeatLineup = true;
+							
 							break;
 						} 
 
-						var sameOutfielders = false;
+						var segment1 = lineupID.replace(/^(\d+\|\d+\|\d+\|\d+\|\d+\|\d+\|)(.*)/, "$1");
+						var segment2 = bestLineups[n]["lineupID"].replace(/^(\d+\|\d+\|\d+\|\d+\|\d+\|\d+\|)(.*)/, "$1");
+
+						if (segment1 == segment2) {
+							if (outfielders[0] == bestLineups[n]['outfielders'][0] && 
+								outfielders[1] == bestLineups[n]['outfielders'][1] && 
+								outfielders[2] == bestLineups[n]['outfielders'][2]) {
+								repeatLineup = true;
+
+								break;
+							}
+
+							if (outfielders[0] == bestLineups[n]['outfielders'][0] && 
+								outfielders[1] == bestLineups[n]['outfielders'][2] && 
+								outfielders[2] == bestLineups[n]['outfielders'][1]) {
+								repeatLineup = true;
+
+								break;
+							}
+
+							if (outfielders[0] == bestLineups[n]['outfielders'][1] && 
+								outfielders[1] == bestLineups[n]['outfielders'][0] && 
+								outfielders[2] == bestLineups[n]['outfielders'][2]) {
+								repeatLineup = true;
+
+								break;
+							}
+
+							if (outfielders[0] == bestLineups[n]['outfielders'][1] && 
+								outfielders[1] == bestLineups[n]['outfielders'][2] && 
+								outfielders[2] == bestLineups[n]['outfielders'][0]) {
+								repeatLineup = true;
+
+								break;
+							}
+
+							if (outfielders[0] == bestLineups[n]['outfielders'][2] && 
+								outfielders[1] == bestLineups[n]['outfielders'][0] && 
+								outfielders[2] == bestLineups[n]['outfielders'][1]) {
+								repeatLineup = true;
+
+								break;
+							}
+
+							if (outfielders[0] == bestLineups[n]['outfielders'][2] && 
+								outfielders[1] == bestLineups[n]['outfielders'][1] && 
+								outfielders[2] == bestLineups[n]['outfielders'][0]) {
+								repeatLineup = true;
+
+								break;
+							}						
+						}
 					};
 
 					if (repeatLineup == false) {
@@ -335,12 +383,10 @@ $(document).ready(function() {
 							]
 						};	
 
-						bestLineups.push(eligibleLineup);					
+						bestLineups.push(eligibleLineup);			
 					}
 				}
 			};
-
-			// console.log(bestLineups[1]); return false;
 
 			bestLineups.sort(function(a,b) {
 			   	return b['salary'] - a['salary'];
