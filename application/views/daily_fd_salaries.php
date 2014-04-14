@@ -101,21 +101,6 @@
 
 		      		<button type="button" class="solver">Solve</button>
 
-					<table class="optimal-lineup">
-						<thead>
-							<tr>
-								<th data-sort='string'>Pos</th>
-								<th data-sort='string'>Name</th>
-								<th data-sort='string'>Team</th>
-								<th data-sort='string'>Opp</th>
-								<th data-sort='string'>Salary</th>
-							</tr>
-						</thead>
-						<tbody>
- 							<tr>
-								<td colspan="5">No lineups yet.</td>
-							</tr>
-						</tbody>
-					</table>
+		      		<div style="clear:both"></div>
 				</div>
 			</section>

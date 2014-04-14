@@ -242,7 +242,7 @@ $(document).ready(function() {
 		$('button.solver').text('Solving...');
 
 		setTimeout(function() {
-			for (var i = 0; i < 100000; i++) {
+			for (var i = 0; i < 10000; i++) {
 				var randomNumber = Math.floor(Math.random()*sortedSalaries["P"].length);
 				changeTracker[0][1] = randomNumber;
 
@@ -392,25 +392,45 @@ $(document).ready(function() {
 			   	return b['salary'] - a['salary'];
 		    });
 
-		    bestLineups = bestLineups.slice(0, 10);
+		    bestLineups = bestLineups.slice(0, 12);
+
+			$('button.solver').prop('disabled', false);
+			$('button.solver').text('Solve');
+
+			for (var i = 0; i < bestLineups.length; i++) {
+				if (bestLineups[i]["salary"] >= 34700) {
+					bestLineups[i]["unspentToggle"] = "good";
+				} else {
+					bestLineups[i]["unspentToggle"] = "bad";
+				}
+			};
 
 			console.log(bestLineups);
+
+			$("div.optimal-lineup").remove();
+
+			for (var i = 0; i < bestLineups.length; i++) {
+				showOptimalLineups(bestLineups[i]["lineup"], bestLineups[i]["unspentToggle"], bestLineups[i]["salary"]);
+			};
+
 
 			$('button.solver').prop('disabled', false);
 			$('button.solver').text('Solve');
 		}, 1500);
+
+		// s
 	});
 
-	function showOptimalLineup(bestLineup, unspentToggle) {
-		$("table.optimal-lineup > tbody > tr").remove();
+	function showOptimalLineups(lineup, unspentToggle, totalSalary) {
+		var htmlOptimalLineup = '<div class="optimal-lineup"><table><thead><th>Pos</th><th>Name</th><th>Team</th><th>Opp</th><th>Salary</th></thead>';
 
-		var htmlOptimalLineup;
+		htmlOptimalLineup += "<tbody>";
 
-		for (var i = 0; i < bestLineup['lineup'].length; i++) {
+		for (var i = 0; i < lineup.length; i++) {
 			htmlOptimalLineup += "<tr>";
 
-			for (var n = 0; n < bestLineup['lineup'][i].length; n++) {
-				htmlOptimalLineup += "<td>"+bestLineup['lineup'][i][n]+"</td>";
+			for (var n = 0; n < lineup[i].length; n++) {
+				htmlOptimalLineup += "<td>"+lineup[i][n]+"</td>";
 			};
 
 			htmlOptimalLineup += "</tr>";
@@ -422,11 +442,10 @@ $(document).ready(function() {
 			var color = "<td style='color: green;'>";
 		}
 
-		htmlOptimalLineup += "<td colspan='4'>Total Salary</td>"+color+"<strong>"+bestLineup['salary']+"</strong></td>";
+		htmlOptimalLineup += "<td colspan='4'>Total Salary</td>"+color+"<strong>"+totalSalary+"</strong></td>";
 
-		$("table.optimal-lineup > tbody:last").append(htmlOptimalLineup);
+		htmlOptimalLineup += "</tbody></table></div>";
 
-		$('button.solver').prop('disabled', false);
-		$('button.solver').text('Solve');
+		$("div.optimal-lineups").append(htmlOptimalLineup);
 	}
 });
