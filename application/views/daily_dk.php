@@ -12,7 +12,7 @@
 						<tbody>
 							<?php foreach ($league as $key => $value) { ?>
 	 							<tr>
-									<td><a href="<?php echo base_url().'daily/fd/'.$value['date'].'/'.$value['time']; ?>"><?php echo $value['date']; ?> (<?php echo $value['capitalized_time']; ?>)</a></td>
+									<td><a href="<?php echo base_url().'daily/dk/'.$value['date'].'/'.$value['time']; ?>"><?php echo $value['date']; ?> (<?php echo $value['capitalized_time']; ?>)</a></td>
 								</tr>
 							<?php } ?>
 						</tbody>

@@ -17,7 +17,8 @@ td, th {
 }
 
 div.salaries,
-div.top-plays {
+div.top-plays,
+div.leagues {
 	width: 472px; 
 	margin: 0 10px; 
 	padding: 10px;
