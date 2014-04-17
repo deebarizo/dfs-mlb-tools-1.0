@@ -38,6 +38,10 @@ div.salaries-table-container {
 	height: 540px;
 }
 
+table.salaries {
+	width: 455px;
+}
+
 div.top-plays-table-container {
 	overflow: auto;
 	height: 505px;
