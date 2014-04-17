@@ -1,7 +1,7 @@
 		<div id="wrapper">
 			<section>
-				<div class="col">
-		      		<h3><i class="fa fa-upload"></i> <?php echo $subhead; ?></h3>
+				<div class="update">
+		      		<h3><?php echo $subhead; ?></h3>
 
 		      		<?php if ($message != 'Form validation error.') { ?>
 				      			<p style="color:red"><?php echo $message; ?></p>

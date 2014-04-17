@@ -45,9 +45,7 @@ class Daily extends CI_Controller {
 
 			$data['league'] = $dk_dir;
 
-			# echo '<pre>';
-			# var_dump($data['league']);
-			# echo '</pre>'; exit();
+
 
 			$this->load->view('templates/header', $data);
 			$this->load->view('daily_dk', $data);
@@ -55,6 +53,90 @@ class Daily extends CI_Controller {
 
 			return false;
 		}
+
+		$capitalized_time = $this->capitalize_time($time);
+
+		$data['page_type'] = 'Daily';
+		$data['page_title'] = 'Daily - '.$date.' - DFS MLB Tools';
+		$data['subhead'] = 'Daily DK - '.$date.' - '.$capitalized_time;	
+
+		$sql = 'SELECT `id` FROM `salaries_dk` WHERE `date` = :date AND `time` = :time LIMIT 1';
+		$s = $this->db->conn_id->prepare($sql);
+		$s->bindValue(':date', $date);
+		$s->bindValue(':time', $time);
+		$s->execute(); 
+
+		$result = $s->fetchAll(PDO::FETCH_COLUMN, 0);
+
+		if (!empty($result)) {
+
+		} else {
+			$csv_file = 'files/dk/'.preg_replace('/-/', '', $date).$time.'.csv';
+
+			if (file_exists($csv_file)) {
+				if (($handle = fopen($csv_file, 'r')) !== false) {
+					$row = 0;
+
+					while (($csv_data = fgetcsv($handle, 5000, ',')) !== false) {
+					    $num = count($data);
+
+					    if ($row != 0) {
+						    $players[$row] = array(
+						       	'position' => $csv_data[0],
+						       	'name' => $csv_data[1],
+						       	'salary' => $csv_data[2],
+						       	'game_info' => $csv_data[3]
+						    );	
+						}
+
+						foreach ($players as $key => $value) {
+							$sql = 'INSERT INTO `salaries_dk`(`position`, 
+															`name`, 
+															`salary`,
+															`game_info`,
+															`date`,
+															`time`) 
+									VALUES (:position, 
+											:name, 
+											:salary,
+											:game_info,
+											:date,
+											:time)'; 
+							$s = $this->db->conn_id->prepare($sql);
+							$s->bindValue(':position', $value['position']);
+							$s->bindValue(':name', $value['name']);
+							$s->bindValue(':salary', $value['salary']);
+							$s->bindValue(':game_info', $value['game_info']);
+							$s->bindValue(':date', $date);
+							$s->bindValue(':time', $time);
+							$s->execute(); 
+						}
+
+					    $row++;
+					}
+				}
+
+				$sql = 'SELECT * FROM `salaries_dk` WHERE `date` = :date AND `time` = :time';
+				$s = $this->db->conn_id->prepare($sql);
+				$s->bindValue(':date', $date);
+				$s->bindValue(':time', $time);
+				$s->execute(); 	
+
+				$data['salaries_dk'] = $s->fetchAll(PDO::FETCH_ASSOC);
+
+				$data['league_id'] = preg_replace('/-/', '', $date).$time;
+			} else {
+				$data['error'] = 'The DK csv file is missing.';
+			}
+		}
+
+		# echo '<pre>';
+		# var_dump($data['salaries_dk']);
+		# echo '</pre>'; exit();
+
+		$this->load->view('templates/header', $data);
+		$this->load->view('daily_dk_salaries', $data);
+		$this->load->view('templates/footer');
 	}
 
 	public function fd($date = 'empty', $time = 'empty') {
