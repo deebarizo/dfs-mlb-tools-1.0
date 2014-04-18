@@ -74,8 +74,6 @@ class Daily extends CI_Controller {
 					$row = 0;
 
 					while (($csv_data = fgetcsv($handle, 5000, ',')) !== false) {
-					    $num = count($data);
-
 					    if ($row != 0) {
 					    	$game_info = preg_replace('/(\w+@\w+)(.*)/', '$1', $csv_data[3]);
 
