@@ -183,33 +183,15 @@ class Daily extends CI_Controller {
 		$data['page_title'] = 'Daily - '.$date.' - DFS MLB Tools';
 		$data['subhead'] = 'Daily FD - '.$date.' - '.$capitalized_time;
 
-		$sql = 'SELECT `id` FROM `league` WHERE `date` = :date AND `time` = :time';
-		$s = $this->db->conn_id->prepare($sql);
-		$s->bindValue(':date', $date);
-		$s->bindValue(':time', $time);
-		$s->execute(); 
+		$this->load->model('salaries_model');
+		$salaries = $this->salaries_model->get_fd_salaries($date, $time);
 
-		$result = $s->fetchAll(PDO::FETCH_COLUMN, 0);
-
-		if (!empty($result)) {
-			$league_id = $result[0];
-
-			$sql = 'SELECT * FROM `fstats_fd` WHERE `league_id` = :league_id';
-			$s = $this->db->conn_id->prepare($sql);
-			$s->bindValue(':league_id', $league_id);
-			$s->execute(); 	
-
-			$data['fstats_fd'] = $s->fetchAll(PDO::FETCH_ASSOC);
-
-			$sql = 'SELECT * FROM `fstats_fd` WHERE `league_id` = :league_id AND top_play_index IS NOT NULL';
-			$s = $this->db->conn_id->prepare($sql);
-			$s->bindValue(':league_id', $league_id);
-			$s->execute(); 	
-
-			$data['top_plays'] = $s->fetchAll(PDO::FETCH_ASSOC);
-		} else {
-			$data['error'] = "The FD salaries are missing.";
-		}		
+		if (isset($salaries['fstats_fd'])) {
+			$data['fstats_fd'] = $salaries['fstats_fd'];
+			$data['top_plays'] = $salaries['top_plays'];
+		} else { 
+			$data['error'] = $salaries;
+		}	
 
 		$this->load->view('templates/header', $data);
 		$this->load->view('daily_fd_salaries', $data);

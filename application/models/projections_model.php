@@ -70,11 +70,7 @@ class projections_model extends CI_Model {
 				}
 			}
 		} else {
-			$data['error'] = 'The Zips csv file is missing.';
-
-			// views
-
-			return false;
+			return 'The Zips csv file is missing.';
 		}
 
 		$csv_steamer_file = 'files/projections/'.preg_replace('/-/', '', $date).'_steamer_batter.csv';
@@ -168,11 +164,7 @@ class projections_model extends CI_Model {
 				}
 			}
 		} else {
-			$data['error'] = 'The Steamer csv file is missing.';
-
-			// views
-
-			return false;
+			return 'The Steamer csv file is missing.';
 		}
 
 		foreach ($projections as $key => &$value) {
@@ -201,8 +193,6 @@ class projections_model extends CI_Model {
 
 		unset($value);
 
-		echo '<pre>';
-		var_dump($projections);
-		echo '</pre>'; exit();
+		return $projections;
 	}
 }

@@ -15,7 +15,17 @@ class Dashboard extends CI_Controller {
 		$data['subhead'] = 'Daily FD - '.$date.' - '.$capitalized_time;	
 
 		$this->load->model('projections_model');
-		$this->projections_model->generate_fd_projections($date);
+		$data['projections'] = $this->projections_model->generate_fd_projections($date);
+
+		if (is_array($data['projections'])) {
+
+		} else { 
+			$data['error'] = $data['projections'];
+		}
+
+		echo '<pre>';
+		var_dump($data['projections']);
+		echo '</pre>'; exit();
 	}
 
 	public function capitalize_time($time) {
