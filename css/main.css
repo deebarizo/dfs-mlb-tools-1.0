@@ -4,7 +4,7 @@ GENERAL
 
 header {
 	margin: 0 10px; 
-	padding: 10px;
+	padding: 10px 10px 0 10px;
 }
 
 h1 {
@@ -34,15 +34,40 @@ div.projections {
 
 div.projections-table-container {
 	overflow: auto;
-	height: 540px;
+	height: 400px;
 }
 
 table.projections {
 	width: 967px;
+	font-size: .9em;
 }
 
-table.projections td.name {
-	width: 30%;
+table.projections th.position, td.position {
+	width: 10%;
+}
+
+table.projections th.name, td.name {
+	width: 40%;
+}
+
+table.projections th.team, td.team {
+	width: 10%;
+}
+
+table.projections th.opponent, td.opponent {
+	width: 10%;
+}
+
+table.projections th.salary, td.salary {
+	width: 10%;
+}
+
+table.projections th.fppg, td.fppg {
+	width: 10%;
+}
+
+table.projections th.vr, td.vr {
+	width: 10%;
 }
 
 

@@ -12,7 +12,7 @@ class Dashboard extends CI_Controller {
 
 		$data['page_type'] = 'Dashboard';
 		$data['page_title'] = 'Dashboard - '.$date.' - DFS MLB Tools';
-		$data['subhead'] = 'Daily FD - '.$date.' - '.$capitalized_time;	
+		$data['subhead'] = 'Dashboard FD - '.$date.' - '.$capitalized_time;	
 
 		$this->load->model('projections_model');
 		$projections = $this->projections_model->generate_fd_projections($date);

@@ -36,8 +36,8 @@
 											<td class="team"><?php echo $value['team']; ?></td>
 											<td class="opponent"><?php echo $value['opponent']; ?></td>
 											<td class="salary"><?php echo $value['salary']; ?></td>
-											<td class="opponent"><?php echo $value['projection']; ?></td>
-											<td class="salary"><?php echo $value['vr']; ?></td>
+											<td class="fppg"><?php echo (isset($value['projection']) ? $value['projection'] : '0.00'); ?></td>
+											<td class="vr"><?php echo (isset($value['vr']) ? $value['vr'] : '0.00'); ?></td>
 										</tr>
 									<?php } ?>
 								</tbody>
