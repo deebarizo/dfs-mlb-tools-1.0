@@ -1,6 +1,6 @@
 		<div class="col-wrapper">
 			<section>
-				<div class="filter-options">
+				<div class="options-dashboard">
 					<h3><?php echo $subhead; ?></h3>
 
 	      			<h4>Position</h4>
@@ -8,12 +8,12 @@
 					<form action="">
 						<select class="position-drop-down" name="position-drop-down">
 							<option value="all" selected>All</option>
-							<option value="catcher">C</option>
-							<option value="first-base">1B</option>
-							<option value="second-base">2B</option>
-							<option value="third-base">3B</option>
-							<option value="shortstop">SS</option>
-							<option value="outfielder">OF</option>
+							<option value="C">C</option>
+							<option value="1B">1B</option>
+							<option value="2B">2B</option>
+							<option value="3B">3B</option>
+							<option value="SS">SS</option>
+							<option value="OF">OF</option>
 						</select>
 					</form>
 				</div>
@@ -49,7 +49,7 @@
 												$toggle_top_play = " top-play";
 											}
 										?>
-			 							<tr class="player<?php echo $toggle_top_play; ?>" data-index="<?php echo $key; ?>">
+			 							<tr class="show-row player<?php echo $toggle_top_play; ?>" data-index="<?php echo $key; ?>">
 											<td class="position"><?php echo $value['position']; ?></td>
 											<td class="name"><?php echo $value['name']; ?></td>
 											<td class="team"><?php echo $value['team']; ?></td>

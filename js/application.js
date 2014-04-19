@@ -1,6 +1,61 @@
 $(document).ready(function() {
 
 	/******************************************************************************************************
+	TABLE SORTER
+	******************************************************************************************************/
+
+	$('.projections').stupidtable(); 
+
+
+
+	/******************************************************************************************************
+	OPTIONS (DASHBOARD)
+	******************************************************************************************************/	
+
+	function changeOptionsDashboard() {
+		var options = getOptionsDashboard();
+
+		$('.show-row').removeClass('show-row').addClass('hide-row');
+
+		if (options['position'] == 'all') {
+			$(".hide-row").addClass('show-row').removeClass('hide-row');
+		} else {
+			$('.projections tr.hide-row').each(function() {
+			    var position = $(this).find(".position").text();
+
+			    if (position == options['position']) {
+			    	$(this).addClass('show-row').removeClass('hide-row');
+			    }
+			});
+		}
+
+		$('.show-row').show(); $('.hide-row').hide();
+	}
+
+	function getOptionsDashboard() {
+		var options = {};
+
+		options['position'] = getPositionDashboard();
+
+		return options;
+	}
+
+	function getPositionDashboard() {
+		var position = $('div.options-dashboard .position-drop-down').val();
+		
+		if (position == 'all') { return 'all'; }
+		
+		return position;	
+	}
+
+	$('select[name=position-drop-down]').change(function() 
+	{
+		changeOptionsDashboard();
+	}); 
+
+
+
+	/******************************************************************************************************
 	TOP PLAYS
 	******************************************************************************************************/
 
@@ -94,6 +149,8 @@ $(document).ready(function() {
             }
         });
 	});
+
+
 
 	/******************************************************************************************************
 	SOLVER (SALARIES)

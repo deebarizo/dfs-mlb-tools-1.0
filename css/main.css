@@ -26,14 +26,11 @@ td, th {
 ONE COLUMN
 ********************************************/
 
-div.filter-options {
+div.options-dashboard {
 	width: 984px;
-	height: 275px;
 	margin: 0 10px; 
 	padding: 10px;
 }
-
-
 
 div.projections {
 	width: 984px;
