@@ -1,7 +1,26 @@
 		<div class="col-wrapper">
 			<section>
+				<div class="filter-options">
+					<h3><?php echo $subhead; ?></h3>
+
+	      			<h4>Position</h4>
+
+					<form action="">
+						<select class="position-drop-down" name="position-drop-down">
+							<option value="all" selected>All</option>
+							<option value="catcher">C</option>
+							<option value="first-base">1B</option>
+							<option value="second-base">2B</option>
+							<option value="third-base">3B</option>
+							<option value="shortstop">SS</option>
+							<option value="outfielder">OF</option>
+						</select>
+					</form>
+				</div>
+			</section>
+			<section>
 				<div class="projections">
-		      		<h3><?php echo $subhead; ?></h3>
+		      		<h3>Projections</h3>
 		  
 		      		<?php if (isset($error)) { ?>
 				      			<p style="color:red"><?php echo $error; ?></p>
