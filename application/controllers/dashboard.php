@@ -30,16 +30,25 @@ class Dashboard extends CI_Controller {
 				// views and return false
 			}	
 
-			$hitters = $this->remove_pitchers($fstats_fd);
-			$hitters_top_plays = $this->remove_pitchers($top_plays);
+			$batters = $this->remove_pitchers($fstats_fd);
+			$batters_top_plays = $this->remove_pitchers($top_plays);
 
-			$hitters = $this->calculate_vr($hitters, $projections);
-			$hitters_top_plays = $this->calculate_vr($hitters_top_plays, $projections);
+			$batters = $this->calculate_vr($batters, $projections);
+			$batters_top_plays = $this->calculate_vr($batters_top_plays, $projections);
 
-			echo '<pre>';
-			var_dump($hitters);
-			var_dump($hitters_top_plays);
-			echo '</pre>'; exit();
+			$data['batters'] = $batters;
+			$data['batters_top_plays'] = $batters_top_plays;
+
+			# echo '<pre>';
+			# var_dump($batters);
+			# var_dump($batters_top_plays);
+			# echo '</pre>'; exit();
+
+			$this->load->view('templates/header', $data);
+			$this->load->view('dashboard_fd', $data);
+			$this->load->view('templates/footer');
+
+			return false;
 		} else { 
 			$data['error'] = $projections;
 
@@ -80,12 +89,12 @@ class Dashboard extends CI_Controller {
 	public function remove_pitchers($salaries) {
 		foreach ($salaries as $key => $value) {
 			if ($value['position'] != 'P') {
-				$hitters[] = $value;
+				$batters[] = $value;
 			}
 		}
 
-		if (isset($hitters)) {
-			return $hitters;
+		if (isset($batters)) {
+			return $batters;
 		} else {
 			return array();
 		}

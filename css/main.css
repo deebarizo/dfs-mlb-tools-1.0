@@ -1,3 +1,7 @@
+/*******************************************
+GENERAL
+********************************************/
+
 header {
 	margin: 0 10px; 
 	padding: 10px;
@@ -16,6 +20,37 @@ td, th {
 	width: 1024px;	
 }
 
+
+
+/*******************************************
+ONE COLUMN
+********************************************/
+
+div.projections {
+	width: 984px;
+	margin: 0 10px; 
+	padding: 10px;
+}
+
+div.projections-table-container {
+	overflow: auto;
+	height: 540px;
+}
+
+table.projections {
+	width: 967px;
+}
+
+table.projections td.name {
+	width: 30%;
+}
+
+
+
+/*******************************************
+TWO COLUMN
+********************************************/
+
 div.salaries,
 div.top-plays,
 div.leagues,
@@ -29,10 +64,6 @@ div.salaries {
 	float: left;
 }
 
-div.top-plays {
-	float: right;
-}
-
 div.salaries-table-container {
 	overflow: auto;
 	height: 540px;
@@ -40,6 +71,10 @@ div.salaries-table-container {
 
 table.salaries {
 	width: 455px;
+}
+
+div.top-plays {
+	float: right;
 }
 
 div.top-plays-table-container {
@@ -69,17 +104,17 @@ div.optimal-lineups {
 	padding: 10px;	
 }
 
+button.solver {
+	float: left;
+	margin-bottom: 10px;
+}
+
 div.optimal-lineup {
 	float: left;
 	width: 331px;
 	margin: 10px 10px 10px 0; 
 	display: inline-block;
 	font-size: .90em;
-}
-
-button.solver {
-	float: left;
-	margin-bottom: 10px;
 }
 
 p.league-time {
