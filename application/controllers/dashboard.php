@@ -18,6 +18,16 @@ class Dashboard extends CI_Controller {
 		$batter_projections = $this->projections_model->generate_fd_batter_projections($date);
 		$pitcher_stats = $this->projections_model->get_fd_pitcher_stats($date);	
 
+		if (is_array($pitcher_stats) == false) {
+			$data['error'] = $pitcher_stats;
+
+			$this->load->view('templates/header', $data);
+			$this->load->view('dashboard_fd', $data);
+			$this->load->view('templates/footer');
+
+			return false;
+		}
+
 		if (is_array($batter_projections)) {
 			$this->load->model('salaries_model');
 			$salaries = $this->salaries_model->get_fd_salaries($date, $time);
