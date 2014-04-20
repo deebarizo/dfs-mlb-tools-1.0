@@ -15,9 +15,10 @@ class Dashboard extends CI_Controller {
 		$data['subhead'] = 'Dashboard FD - '.$date.' - '.$capitalized_time;	
 
 		$this->load->model('projections_model');
-		$projections = $this->projections_model->generate_fd_projections($date);
+		$batter_projections = $this->projections_model->generate_fd_batter_projections($date);
+		$pitcher_stats = $this->projections_model->get_fd_pitcher_stats($date);	
 
-		if (is_array($projections)) {
+		if (is_array($batter_projections)) {
 			$this->load->model('salaries_model');
 			$salaries = $this->salaries_model->get_fd_salaries($date, $time);
 
@@ -27,20 +28,24 @@ class Dashboard extends CI_Controller {
 			} else { 
 				$data['error'] = $salaries;
 
-				// views and return false
+				$this->load->view('templates/header', $data);
+				$this->load->view('dashboard_fd', $data);
+				$this->load->view('templates/footer');
+
+				return false;
 			}	
 
-			$batters = $this->remove_pitchers($fstats_fd);
-			$batters_top_plays = $this->remove_pitchers($top_plays);
+			$batters = $this->remove_position($fstats_fd, 'pitcher');
+			$batters_top_plays = $this->remove_position($top_plays, 'pitcher');
 
-			$batters = $this->calculate_vr($batters, $projections);
-			$batters_top_plays = $this->calculate_vr($batters_top_plays, $projections);
+			$batters = $this->calculate_vr($batters, $batter_projections);
+			$batters_top_plays = $this->calculate_vr($batters_top_plays, $batter_projections);
 
 			$this->load->model('scraping_model');
 			$rotowire_lineups = $this->scraping_model->scrape_rotowire_lineups();
 
-			$batters = $this->add_starting_pitchers($batters, $rotowire_lineups);
-			$batters_top_plays = $this->add_starting_pitchers($batters_top_plays, $rotowire_lineups);
+			$batters = $this->add_starting_pitchers($batters, $rotowire_lineups, $pitcher_stats);
+			$batters_top_plays = $this->add_starting_pitchers($batters_top_plays, $rotowire_lineups, $pitcher_stats);
 
 			$data['batters'] = $batters;
 			$data['batters_top_plays'] = $batters_top_plays;
@@ -55,13 +60,17 @@ class Dashboard extends CI_Controller {
 
 			return false;
 		} else { 
-			$data['error'] = $projections;
+			$data['error'] = $batter_projections;
 
-			// views and return false
+			$this->load->view('templates/header', $data);
+			$this->load->view('dashboard_fd', $data);
+			$this->load->view('templates/footer');
+
+			return false;
 		}
 	}
 
-	public function add_starting_pitchers($salaries, $rotowire_lineups) {
+	public function add_starting_pitchers($salaries, $rotowire_lineups, $pitcher_stats) {
 		if (empty($salaries)) {
 			return $salaries;
 		}
@@ -77,6 +86,16 @@ class Dashboard extends CI_Controller {
 		}
 
 		unset($salary);
+
+		foreach ($salaries as $key => &$salary) {
+			foreach ($pitcher_stats as $pitcher) {
+				if ($salary['opponent_pitcher'] == $pitcher['name']) {
+					$salary['opponent_era'] = $pitcher['era_final'];
+
+					break;
+				}
+			}
+		}
 
 		return $salaries;
 	}
@@ -105,18 +124,34 @@ class Dashboard extends CI_Controller {
 		return $salaries;
 	}
 
-	public function remove_pitchers($salaries) {
-		foreach ($salaries as $key => $value) {
-			if ($value['position'] != 'P') {
-				$batters[] = $value;
+	public function remove_position($salaries, $position) {
+		if ($position == 'pitcher') {
+			foreach ($salaries as $key => $value) {
+				if ($value['position'] != 'P') {
+					$batters[] = $value;
+				}
 			}
+
+			if (isset($batters)) {
+				return $batters;
+			} else {
+				return array();
+			}		
 		}
 
-		if (isset($batters)) {
-			return $batters;
-		} else {
-			return array();
-		}
+		if ($position == 'batter') {
+			foreach ($salaries as $key => $value) {
+				if ($value['position'] == 'P') {
+					$pitchers[] = $value;
+				}
+			}
+
+			if (isset($pitchers)) {
+				return $pitchers;
+			} else {
+				return array();
+			}		
+		}	
 	}
 
 	public function capitalize_time($time) {

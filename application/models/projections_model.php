@@ -6,7 +6,87 @@ class projections_model extends CI_Model {
 		$this->load->database();
 	}
 
-	public function generate_fd_projections($date) {
+	public function get_fd_pitcher_stats($date) {
+		$csv_zips_file = 'files/projections/'.preg_replace('/-/', '', $date).'_zips_pitcher.csv';
+
+		if (file_exists($csv_zips_file)) {
+			if (($handle = fopen($csv_zips_file, 'r')) !== false) {
+				$row = 0;
+
+				while (($csv_data = fgetcsv($handle, 5000, ',')) !== false) {
+				    if ($row != 0) {
+				    	$name = $csv_data[0];
+
+				    	$era = $csv_data[3];
+				    	
+				    	$player_id = $csv_data[17];
+
+				    	$pitcher_stats[$player_id]['name'] = $name;
+				    	$pitcher_stats[$player_id]['era_zips'] = $era;
+					}
+
+				    $row++;
+				}
+			}
+		} else {
+			return 'The Zips csv file for pitchers is missing.';
+		}
+
+		$csv_steamer_file = 'files/projections/'.preg_replace('/-/', '', $date).'_steamer_pitcher.csv';
+
+		if (file_exists($csv_steamer_file)) {
+			if (($handle = fopen($csv_steamer_file, 'r')) !== false) {
+				$row = 0;
+
+				while (($csv_data = fgetcsv($handle, 5000, ',')) !== false) {
+				    if ($row != 0) {
+				    	$name = $csv_data[0];
+
+				    	$era = $csv_data[3];
+				    	
+				    	$player_id = $csv_data[18];
+
+				    	$pitcher_stats[$player_id]['name'] = $name;
+				    	$pitcher_stats[$player_id]['era_steamer'] = $era;
+					}
+
+				    $row++;
+				}
+			}
+		} else {
+			return 'The Steamer csv file for pitchers is missing.';
+		}
+
+		foreach ($pitcher_stats as $key => &$value) {
+			if (isset($value['era_zips']) AND isset($value['era_steamer'])) {
+				$value['era_final'] = ($value['era_zips'] + $value['era_steamer']) / 2;
+				continue;
+			}
+
+			if (isset($value['era_zips'])) {
+				$value['era_final'] = $value['era_zips'];
+				continue;
+			}
+
+			if (isset($value['era_steamer'])) {
+				$value['era_final'] = $value['era_steamer'];
+				continue;
+			}
+		}
+
+		unset($value);
+
+		foreach ($pitcher_stats as $key => &$value) {
+			$value['era_final'] = round($value['era_final'], 2);
+			$value['era_final'] = number_format($value['era_final'], 2);
+		}
+
+		unset($value);
+
+		return $pitcher_stats;
+	}
+
+	public function generate_fd_batter_projections($date) {
 		$csv_zips_file = 'files/projections/'.preg_replace('/-/', '', $date).'_zips_batter.csv';
 
 		if (file_exists($csv_zips_file)) {
@@ -70,7 +150,7 @@ class projections_model extends CI_Model {
 				}
 			}
 		} else {
-			return 'The Zips csv file is missing.';
+			return 'The Zips csv file for batters is missing.';
 		}
 
 		$csv_steamer_file = 'files/projections/'.preg_replace('/-/', '', $date).'_steamer_batter.csv';
@@ -164,7 +244,7 @@ class projections_model extends CI_Model {
 				}
 			}
 		} else {
-			return 'The Steamer csv file is missing.';
+			return 'The Steamer csv file for batters is missing.';
 		}
 
 		foreach ($projections as $key => &$value) {
