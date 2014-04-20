@@ -3,14 +3,39 @@ class scraping_model extends CI_Model {
 	public function __construct() {
 		parent::__construct();
 
+		$this->load->helper('phpquery');
+
 		$this->load->database();
+
+		$this->load->library('mod_team_abbr');
+	}
+
+	public function scrape_rotowire_lineups() {
+		$html = phpQuery::newDocumentFileHTML('http://www.rotowire.com/baseball/daily_lineups.htm');
+
+		$result = $html->find('div[class*=dlineups-pitchers] a');
+		$num_pitchers = count($result);
+
+		for ($i = 0; $i < $num_pitchers; $i++) { 
+			$rotowire_lineups['pitchers'][$i]['name'] = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->text();
+			
+			$raw_data = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->parent()->text();
+			$team = preg_replace('/(\w+)(:)(.*)/', '$1', $raw_data);
+			$rotowire_lineups['pitchers'][$i]['team'] = $this->mod_team_abbr->from_rotowire_lineup_to_fd($team);
+
+			$raw_data = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->next('span')->text();
+			$hand = preg_replace('/(.*)(\()(\w+)(\))/', '$3', $raw_data);
+			$rotowire_lineups['pitchers'][$i]['hand'] = $hand;
+		}
+
+		echo '<pre>';
+		var_dump($rotowire_lineups);
+		echo '</pre>'; exit();
 	}
 
 	public function scrape_fd_salaries($form_data, $today_year) {
 		$url = $form_data['url'];
 		$time = $form_data['league_time'];
-
-		$this->load->helper('phpquery');
 
 		$html = phpQuery::newDocumentFileHTML($url);
 

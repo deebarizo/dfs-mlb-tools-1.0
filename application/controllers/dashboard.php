@@ -39,10 +39,12 @@ class Dashboard extends CI_Controller {
 			$data['batters'] = $batters;
 			$data['batters_top_plays'] = $batters_top_plays;
 
-			# echo '<pre>';
-			# var_dump($batters);
-			# var_dump($batters_top_plays);
-			# echo '</pre>'; exit();
+			$this->load->model('scraping_model');
+			$rotowire_lineups = $this->scraping_model->scrape_rotowire_lineups();
+
+			echo '<pre>';
+			var_dump($rotowire_lineups);
+			echo '</pre>'; exit();
 
 			$this->load->view('templates/header', $data);
 			$this->load->view('dashboard_fd', $data);

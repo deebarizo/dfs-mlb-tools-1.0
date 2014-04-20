@@ -48,8 +48,7 @@ $(document).ready(function() {
 		return position;	
 	}
 
-	$('select[name=position-drop-down]').change(function() 
-	{
+	$('select[name=position-drop-down]').change(function() {
 		changeOptionsDashboard();
 	}); 
 
