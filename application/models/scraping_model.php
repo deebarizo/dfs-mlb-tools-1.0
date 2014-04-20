@@ -28,9 +28,7 @@ class scraping_model extends CI_Model {
 			$rotowire_lineups['pitchers'][$i]['hand'] = $hand;
 		}
 
-		echo '<pre>';
-		var_dump($rotowire_lineups);
-		echo '</pre>'; exit();
+		return $rotowire_lineups;
 	}
 
 	public function scrape_fd_salaries($form_data, $today_year) {

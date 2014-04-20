@@ -35,6 +35,8 @@
 										<th data-sort='string'>Name</th>
 										<th data-sort='string'>Team</th>
 										<th data-sort='string'>Opp</th>
+										<th data-sort='string'>Opp P</th>
+										<th data-sort='string'>Opp ERA</th>
 										<th data-sort='string'>Salary</th>
 										<th data-sort='float'>FPPG</th>
 										<th data-sort='float'>VR</th>
@@ -54,6 +56,8 @@
 											<td class="name"><?php echo $value['name']; ?></td>
 											<td class="team"><?php echo $value['team']; ?></td>
 											<td class="opponent"><?php echo $value['opponent']; ?></td>
+											<td class="opponent-pitcher"><?php echo $value['opponent_pitcher']; ?></td>
+											<td class="opponent-era">4.15</td>
 											<td class="salary"><?php echo $value['salary']; ?></td>
 											<td class="fppg"><?php echo (isset($value['projection']) ? $value['projection'] : '0.00'); ?></td>
 											<td class="vr"><?php echo (isset($value['vr']) ? $value['vr'] : '0.00'); ?></td>

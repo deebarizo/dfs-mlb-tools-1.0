@@ -36,15 +36,18 @@ class Dashboard extends CI_Controller {
 			$batters = $this->calculate_vr($batters, $projections);
 			$batters_top_plays = $this->calculate_vr($batters_top_plays, $projections);
 
-			$data['batters'] = $batters;
-			$data['batters_top_plays'] = $batters_top_plays;
-
 			$this->load->model('scraping_model');
 			$rotowire_lineups = $this->scraping_model->scrape_rotowire_lineups();
 
-			echo '<pre>';
-			var_dump($rotowire_lineups);
-			echo '</pre>'; exit();
+			$batters = $this->add_starting_pitchers($batters, $rotowire_lineups);
+			$batters_top_plays = $this->add_starting_pitchers($batters_top_plays, $rotowire_lineups);
+
+			$data['batters'] = $batters;
+			$data['batters_top_plays'] = $batters_top_plays;
+
+			# echo '<pre>';
+			# var_dump($batters);
+			# echo '</pre>'; exit();
 
 			$this->load->view('templates/header', $data);
 			$this->load->view('dashboard_fd', $data);
@@ -56,6 +59,26 @@ class Dashboard extends CI_Controller {
 
 			// views and return false
 		}
+	}
+
+	public function add_starting_pitchers($salaries, $rotowire_lineups) {
+		if (empty($salaries)) {
+			return $salaries;
+		}
+
+		foreach ($salaries as $key => &$salary) {
+			foreach ($rotowire_lineups['pitchers'] as $pitcher) {
+				if ($salary['opponent'] == $pitcher['team']) {
+					$salary['opponent_pitcher'] = $pitcher['name'];
+
+					break;
+				}				
+			}
+		}
+
+		unset($salary);
+
+		return $salaries;
 	}
 
 	public function calculate_vr($salaries, $projections) {
@@ -71,16 +94,10 @@ class Dashboard extends CI_Controller {
 					$vr = $projection['total_final'] / ($salary['salary'] / 1000);
 					$vr = round($vr, 2);
 					$salary['vr'] = number_format($vr, 2);
+
+					break;
 				}				
 			}
-
-			/*
-			if (isset($salary['vr']) == false) {
-				echo '<pre>';
-				var_dump($salary);
-				echo '</pre>'; exit();
-			}
-			*/
 		}
 
 		unset($salary);

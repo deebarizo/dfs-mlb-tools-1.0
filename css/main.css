@@ -49,31 +49,39 @@ table.projections {
 }
 
 table.projections th.position, td.position {
-	width: 10%;
+	width: 3%;
 }
 
 table.projections th.name, td.name {
-	width: 40%;
+	width: 20%;
 }
 
 table.projections th.team, td.team {
-	width: 10%;
+	width: 4%;
 }
 
 table.projections th.opponent, td.opponent {
-	width: 10%;
+	width: 4%;
+}
+
+table.projections th.opponent-pitcher, td.opponent-pitcher {
+	width: 20%;
+}
+
+table.projections th.opponent-era, td.opponent-era {
+	width: 4%;
 }
 
 table.projections th.salary, td.salary {
-	width: 10%;
+	width: 4%;
 }
 
 table.projections th.fppg, td.fppg {
-	width: 10%;
+	width: 4%;
 }
 
 table.projections th.vr, td.vr {
-	width: 10%;
+	width: 4%;
 }
 
 
