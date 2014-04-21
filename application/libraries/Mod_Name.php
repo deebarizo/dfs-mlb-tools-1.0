@@ -1,6 +1,15 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
 
-class Mod_Team_Abbr {
+class Mod_Name {
+	public function from_fd_to_projections($name) {
+		switch ($name) {
+		    case 'Jorge De La Rosa':
+	        	return 'Jorge de la Rosa';
+		}		
+
+		return $name;
+	}
+
 	public function from_rotowire_lineup_to_fd($team) {
 		switch ($team) {
 		    case 'NY-N':

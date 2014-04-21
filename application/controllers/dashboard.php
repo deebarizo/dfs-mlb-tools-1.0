@@ -5,6 +5,8 @@ class Dashboard extends CI_Controller {
 		parent::__construct();
 
 		$this->load->database();
+
+		$this->load->library('mod_name');
 	}
 
 	public function fd($date = 'empty', $time = 'empty') {
@@ -95,6 +97,8 @@ class Dashboard extends CI_Controller {
 
 		foreach ($salaries as $key => &$salary) {
 			foreach ($pitcher_stats as $pitcher) {
+				$salary['opponent_pitcher'] = $this->mod_name->from_fd_to_projections($salary['opponent_pitcher']);
+				
 				if ($salary['opponent_pitcher'] == $pitcher['name']) {
 					$salary['opponent_era'] = $pitcher['era_final'];
 
