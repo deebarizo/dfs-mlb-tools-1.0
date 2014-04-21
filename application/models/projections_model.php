@@ -4,6 +4,8 @@ class projections_model extends CI_Model {
 		parent::__construct();
 
 		$this->load->database();
+
+		$this->load->library('calculations');
 	}
 
 	public function get_fd_pitcher_stats($date) {
@@ -86,7 +88,7 @@ class projections_model extends CI_Model {
 		return $pitcher_stats;
 	}
 
-	public function generate_fd_batter_projections($date) {
+	public function generate_fd_batter_projections($date, $batters) {
 		$csv_zips_file = 'files/projections/'.preg_replace('/-/', '', $date).'_zips_batter.csv';
 
 		if (file_exists($csv_zips_file)) {
@@ -97,53 +99,65 @@ class projections_model extends CI_Model {
 				    if ($row != 0) {
 				    	$name = $csv_data[0];
 
-				    	$games = $csv_data[1];
+				    	foreach ($batters as $key => $batter) {
+				    		if ($name == $batter['name']) {
+						    	$games = $csv_data[1];
 
-				    	$ab = $csv_data[3];
-				    	
-				    	$hits = $csv_data[4];
-				    	$doubles = $csv_data[5];
-				    	$triples = $csv_data[6];
-				    	$hr = $csv_data[7];
+						    	$ab = $csv_data[3];
+						    	
+						    	$hits = $csv_data[4];
+						    	$doubles = $csv_data[5];
+						    	$triples = $csv_data[6];
+						    	$hr = $csv_data[7];
 
-				    	$runs = $csv_data[8];
-				    	$rbi = $csv_data[9];
+						    	$runs = $csv_data[8];
+						    	$rbi = $csv_data[9];
 
-				    	$bb = $csv_data[10];
-				    	$hbp = $csv_data[12];
+						    	$bb = $csv_data[10];
+						    	$hbp = $csv_data[12];
 
-				    	$sb = $csv_data[13];
+						    	$sb = $csv_data[13];
 
-				    	$player_id = $csv_data[23];
+						    	$player_id = $csv_data[23];
 
-				    	$singles = $hits - $doubles - $triples - $hr;
-				    	$outs = $ab - $hits;
+						    	$singles = $hits - $doubles - $triples - $hr;
+						    	$outs = $ab - $hits;
 
-				    	$projections[$player_id]['name'] = $name;
-				    	$projections[$player_id]['games'] = $games;
+						    	$era_mod = $this->calculations->era_mod($batter['opponent_era']);
 
-				    	$projections[$player_id]['bb_zips'] = $bb / $games;
-				    	$projections[$player_id]['hbp_zips'] = $hbp / $games;
-				    	$projections[$player_id]['singles_zips'] = $singles / $games;
-				    	$projections[$player_id]['doubles_zips'] = ($doubles / $games) * 2;
-				    	$projections[$player_id]['triples_zips'] = ($triples / $games) * 3;
-				    	$projections[$player_id]['hr_zips'] = ($hr / $games) * 4;
+						    	echo '<pre>';
+								var_dump($era_mod);
+								echo '</pre>'; exit();
 
-				    	$projections[$player_id]['rbi_zips'] = $rbi / $games;
-				    	$projections[$player_id]['runs_zips'] = $runs / $games;
+						    	$projections[$player_id]['name'] = $name;
+						    	$projections[$player_id]['games'] = $games;
 
-				    	$projections[$player_id]['sb_zips'] = ($sb / $games) * 2;
+						    	$projections[$player_id]['bb_zips'] = $bb / $games;
+						    	$projections[$player_id]['hbp_zips'] = $hbp / $games;
+						    	$projections[$player_id]['singles_zips'] = $singles / $games;
+						    	$projections[$player_id]['doubles_zips'] = ($doubles / $games) * 2;
+						    	$projections[$player_id]['triples_zips'] = ($triples / $games) * 3;
+						    	$projections[$player_id]['hr_zips'] = ($hr / $games) * 4;
 
-				    	$projections[$player_id]['outs_zips'] = ($outs / $games) * -0.25;
+						    	$projections[$player_id]['rbi_zips'] = $rbi / $games;
+						    	$projections[$player_id]['runs_zips'] = $runs / $games;
 
-				    	$total = 0;
-				    	foreach ($projections[$player_id] as $key => $value) {
-				    		if ((strpos($key,'zips') !== false)) {
-				    			$total += $value;
+						    	$projections[$player_id]['sb_zips'] = ($sb / $games) * 2;
+
+						    	$projections[$player_id]['outs_zips'] = ($outs / $games) * -0.25;
+
+						    	$total = 0;
+						    	foreach ($projections[$player_id] as $key => $value) {
+						    		if ((strpos($key,'zips') !== false)) {
+						    			$total += $value;
+						    		}
+						    	}
+
+								$projections[$player_id]['total_zips'] = $total;
+
+				    			break;
 				    		}
 				    	}
-
-						$projections[$player_id]['total_zips'] = $total;
 					}
 
 				    $row++;
@@ -152,6 +166,10 @@ class projections_model extends CI_Model {
 		} else {
 			return 'The Zips csv file for batters is missing.';
 		}
+
+		echo '<pre>';
+		var_dump($projections);
+		echo '</pre>'; exit();
 
 		$csv_steamer_file = 'files/projections/'.preg_replace('/-/', '', $date).'_steamer_batter.csv';
 

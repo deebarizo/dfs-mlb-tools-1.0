@@ -15,8 +15,10 @@ class Dashboard extends CI_Controller {
 		$data['subhead'] = 'Dashboard FD - '.$date.' - '.$capitalized_time;	
 
 		$this->load->model('projections_model');
-		$batter_projections = $this->projections_model->generate_fd_batter_projections($date);
 		$pitcher_stats = $this->projections_model->get_fd_pitcher_stats($date);	
+
+		$this->load->model('scraping_model');
+		$rotowire_lineups = $this->scraping_model->scrape_rotowire_lineups();
 
 		if (is_array($pitcher_stats) == false) {
 			$data['error'] = $pitcher_stats;
@@ -28,41 +30,35 @@ class Dashboard extends CI_Controller {
 			return false;
 		}
 
+		$this->load->model('salaries_model');
+		$salaries = $this->salaries_model->get_fd_salaries($date, $time);
+
+		if (isset($salaries['fstats_fd'])) {
+			$fstats_fd = $salaries['fstats_fd'];
+		} else { 
+			$data['error'] = $salaries;
+
+			$this->load->view('templates/header', $data);
+			$this->load->view('dashboard_fd', $data);
+			$this->load->view('templates/footer');
+
+			return false;
+		}	
+
+		$batters = $this->remove_position($fstats_fd, 'pitcher');
+
+		$batters = $this->add_starting_pitchers($batters, $rotowire_lineups, $pitcher_stats);
+
+		$batter_projections = $this->projections_model->generate_fd_batter_projections($date, $batters);
+
+		echo '<pre>';
+		var_dump($batter_projections);
+		echo '</pre>'; exit();
+
 		if (is_array($batter_projections)) {
-			$this->load->model('salaries_model');
-			$salaries = $this->salaries_model->get_fd_salaries($date, $time);
-
-			if (isset($salaries['fstats_fd'])) {
-				$fstats_fd = $salaries['fstats_fd'];
-				$top_plays = $salaries['top_plays'];
-			} else { 
-				$data['error'] = $salaries;
-
-				$this->load->view('templates/header', $data);
-				$this->load->view('dashboard_fd', $data);
-				$this->load->view('templates/footer');
-
-				return false;
-			}	
-
-			$batters = $this->remove_position($fstats_fd, 'pitcher');
-			$batters_top_plays = $this->remove_position($top_plays, 'pitcher');
-
 			$batters = $this->calculate_vr($batters, $batter_projections);
-			$batters_top_plays = $this->calculate_vr($batters_top_plays, $batter_projections);
-
-			$this->load->model('scraping_model');
-			$rotowire_lineups = $this->scraping_model->scrape_rotowire_lineups();
-
-			$batters = $this->add_starting_pitchers($batters, $rotowire_lineups, $pitcher_stats);
-			$batters_top_plays = $this->add_starting_pitchers($batters_top_plays, $rotowire_lineups, $pitcher_stats);
 
 			$data['batters'] = $batters;
-			$data['batters_top_plays'] = $batters_top_plays;
-
-			# echo '<pre>';
-			# var_dump($batters);
-			# echo '</pre>'; exit();
 
 			$this->load->view('templates/header', $data);
 			$this->load->view('dashboard_fd', $data);
