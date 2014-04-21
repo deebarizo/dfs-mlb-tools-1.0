@@ -11,14 +11,20 @@ class Mod_Team_Abbr {
 		        return 'TAM';
 		    case 'CHI-A':
 		        return 'CWS';
+		    case 'CHI-N':
+		        return 'CHC';
 		    case 'AZ':
 		        return 'ARI';
 		    case 'LA':
 		        return 'LOS';
+		    case 'ANA':
+		        return 'LAA';
 		    case 'SF':
 		        return 'SFG';
 		    case 'SD':
 		        return 'SDP';
+		    case 'KC':
+		        return 'KAN';
 		}
 
 		return $team;
