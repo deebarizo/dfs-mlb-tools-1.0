@@ -5,6 +5,10 @@ class Mod_Name {
 		switch ($name) {
 		    case 'Jorge De La Rosa':
 	        	return 'Jorge de la Rosa';
+		    case 'Charles Leesman':
+	        	return 'Charlie Leesman';
+		    case 'Nick Martinez':
+	        	return 'Nicholas Martinez';
 		}		
 
 		return $name;
