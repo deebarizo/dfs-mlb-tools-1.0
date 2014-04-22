@@ -10,6 +10,15 @@ class Mod_Name {
 		return $name;
 	}
 
+	public function from_projections_to_fd($name) {
+		switch ($name) {
+		    case 'Travis d\'Arnaud':
+	        	return 'Travis D\'Arnaud';
+		}		
+
+		return $name;
+	}
+
 	public function from_rotowire_lineup_to_fd($team) {
 		switch ($team) {
 		    case 'NY-N':

@@ -53,9 +53,9 @@ class Dashboard extends CI_Controller {
 
 		$batter_projections = $this->projections_model->generate_fd_batter_projections($date, $batters);
 
-		echo '<pre>';
-		var_dump($batter_projections);
-		echo '</pre>'; exit();
+		# echo '<pre>';
+		# var_dump($batter_projections);
+		# echo '</pre>'; exit();
 
 		if (is_array($batter_projections)) {
 			$batters = $this->calculate_vr($batters, $batter_projections);

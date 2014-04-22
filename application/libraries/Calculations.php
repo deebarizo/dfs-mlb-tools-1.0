@@ -1,6 +1,64 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
 
 class Calculations {
+	public function stat_projection_fd($raw_projection, $games, $pa, $era_mod, $stat) {
+		if ($games != 'NA' AND $pa == 'NA') {
+			switch ($stat) {
+			    case 'bb':
+			    	$answer = ($raw_projection / $games) + (($raw_projection / $games) * $era_mod);
+			    	return $answer;
+			    case 'singles':
+			    	$answer = ($raw_projection / $games) + (($raw_projection / $games) * $era_mod);
+			    	return $answer;
+			    case 'doubles':
+			    	$answer = (($raw_projection / $games) + (($raw_projection / $games) * $era_mod)) * 2;
+			    	return $answer;
+			    case 'triples':
+			    	$answer = (($raw_projection / $games) + (($raw_projection / $games) * $era_mod)) * 3;
+			    	return $answer;
+			    case 'hr':
+			    	$answer = (($raw_projection / $games) + (($raw_projection / $games) * $era_mod)) * 4;
+			    	return $answer;
+			    case 'rbi':
+			    	$answer = ($raw_projection / $games) + (($raw_projection / $games) * $era_mod);
+			    	return $answer;
+			    case 'runs':
+			    	$answer = ($raw_projection / $games) + (($raw_projection / $games) * $era_mod);
+			    	return $answer;
+			    case 'outs':
+			    	$answer = (($raw_projection / $games) + (($raw_projection / $games) * $era_mod)) * -0.25;
+			    	return $answer;
+			}			
+		} else if ($games == 'NA' AND $pa != 'NA') {
+			switch ($stat) {
+			    case 'bb':
+			    	$answer = (($raw_projection / $pa) + (($raw_projection / $pa) * $era_mod)) * 4.25;
+			    	return $answer;
+			    case 'singles':
+			    	$answer = (($raw_projection / $pa) + (($raw_projection / $pa) * $era_mod)) * 4.25;
+			    	return $answer;
+			    case 'doubles':
+			    	$answer = (($raw_projection / $pa) + (($raw_projection / $pa) * $era_mod)) * 2 * 4.25;
+			    	return $answer;
+			    case 'triples':
+			    	$answer = (($raw_projection / $pa) + (($raw_projection / $pa) * $era_mod)) * 3 * 4.25;
+			    	return $answer;
+			    case 'hr':
+			    	$answer = (($raw_projection / $pa) + (($raw_projection / $pa) * $era_mod)) * 4 * 4.25;
+			    	return $answer;
+			    case 'rbi':
+			    	$answer = (($raw_projection / $pa) + (($raw_projection / $pa) * $era_mod)) * 4.25;
+			    	return $answer;
+			    case 'runs':
+			    	$answer = (($raw_projection / $pa) + (($raw_projection / $pa) * $era_mod)) * 4.25;
+			    	return $answer;
+			    case 'outs':
+			    	$answer = (($raw_projection / $pa) + (($raw_projection / $pa) * $era_mod)) * -0.25 * 4.25;
+			    	return $answer;
+			}	
+		}
+	}
+
 	public function era_mod($era) {
 		if ($era < 3.25) {
 			$era_mod = array(
