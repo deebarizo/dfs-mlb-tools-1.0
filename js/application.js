@@ -15,12 +15,12 @@ $(document).ready(function() {
 	function changeOptionsDashboard() {
 		var options = getOptionsDashboard();
 
-		$('.show-row').removeClass('show-row').addClass('hide-row');
+		$('.projections tr.player').removeClass('show-row').addClass('hide-row');
 
 		if (options['position'] == 'all') {
-			$(".hide-row").addClass('show-row').removeClass('hide-row');
+			$(".player.hide-row.in-lineup").addClass('show-row').removeClass('hide-row');
 		} else {
-			$('.projections tr.hide-row').each(function() {
+			$('.projections tr.player.hide-row.in-lineup').each(function() {
 			    var position = $(this).find(".position").text();
 
 			    if (position == options['position']) {
@@ -42,8 +42,6 @@ $(document).ready(function() {
 
 	function getPositionDashboard() {
 		var position = $('div.options-dashboard .position-drop-down').val();
-		
-		if (position == 'all') { return 'all'; }
 		
 		return position;	
 	}

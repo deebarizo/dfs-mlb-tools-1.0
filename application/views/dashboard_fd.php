@@ -45,13 +45,19 @@
 								<tbody>
 									<?php foreach ($batters as $key => $value) { ?>
 										<?php 
+											if (is_numeric($value['batting_order'])) {
+												$toggle_in_lineup = "show-row in-lineup ";
+											} else {
+												$toggle_in_lineup = "";
+											}
+
 											if (is_null($value['top_play_index'])) {
 												$toggle_top_play = "";
 											} else {
 												$toggle_top_play = " top-play";
 											}
 										?>
-			 							<tr class="show-row player<?php echo $toggle_top_play; ?>" data-index="<?php echo $key; ?>">
+			 							<tr class="<?php echo $toggle_in_lineup; ?>player<?php echo $toggle_top_play; ?>" data-index="<?php echo $key; ?>">
 											<td class="position"><?php echo $value['position']; ?></td>
 											<td class="name"><?php echo $value['name']; ?></td>
 											<td class="team"><?php echo $value['team']; ?></td>
