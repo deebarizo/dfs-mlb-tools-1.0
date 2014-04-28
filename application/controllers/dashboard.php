@@ -20,7 +20,7 @@ class Dashboard extends CI_Controller {
 		$pitcher_stats = $this->projections_model->get_fd_pitcher_stats($date);	
 
 		$this->load->model('scraping_model');
-		$rotowire_lineups = $this->scraping_model->scrape_rotowire_lineups();
+		$rotowire_lineups = $this->scraping_model->scrape_rotowire_lineups($date);
 
 		if (is_array($pitcher_stats) == false) {
 			$data['error'] = $pitcher_stats;
@@ -54,11 +54,16 @@ class Dashboard extends CI_Controller {
 		$batter_projections = $this->projections_model->generate_fd_batter_projections($date, $batters);
 
 		# echo '<pre>';
-		# var_dump($batter_projections);
+		# var_dump($batters);
 		# echo '</pre>'; exit();
 
 		if (is_array($batter_projections)) {
 			$batters = $this->calculate_vr($batters, $batter_projections);
+			$batters = $this->lineup_check($batters, $rotowire_lineups);
+
+			echo '<pre>';
+			var_dump($batters);
+			echo '</pre>'; exit();
 
 			$data['batters'] = $batters;
 
@@ -78,6 +83,26 @@ class Dashboard extends CI_Controller {
 		}
 	}
 
+	public function lineup_check($batters, $rotowire_lineups) {
+		foreach ($batters as $key => &$batter) {
+			foreach ($rotowire_lineups['batters'] as $lineup) {
+				if ($batter['name'] == $lineup['name'] AND $batter['team'] == $lineup['team']) {
+					$batter['batting_order'] = $lineup['batting_order'];
+
+					break;
+				}
+			}
+
+			if (isset($batter['batting_order']) == false) {
+				$batter['batting_order'] = 'Not in a lineup';
+			}
+		}
+
+		unset($batter);
+
+		return $batters;
+	}
+
 	public function add_starting_pitchers($salaries, $rotowire_lineups, $pitcher_stats) {
 		if (empty($salaries)) {
 			return $salaries;
@@ -87,6 +112,7 @@ class Dashboard extends CI_Controller {
 			foreach ($rotowire_lineups['pitchers'] as $pitcher) {
 				if ($salary['opponent'] == $pitcher['team']) {
 					$salary['opponent_pitcher'] = $pitcher['name'];
+					$salary['opponent_hand'] = $pitcher['hand'];
 
 					break;
 				}				
@@ -106,6 +132,8 @@ class Dashboard extends CI_Controller {
 				}
 			}
 		}
+
+		unset($salary);
 
 		return $salaries;
 	}

@@ -10,23 +10,48 @@ class scraping_model extends CI_Model {
 		$this->load->library('mod_name');
 	}
 
-	public function scrape_rotowire_lineups() {
+	public function scrape_rotowire_lineups($date) {
 		$html = phpQuery::newDocumentFileHTML('http://www.rotowire.com/baseball/daily_lineups.htm');
 
 		$result = $html->find('div[class*=dlineups-pitchers] a');
-		$num_pitchers = count($result);
+		$num_teams = count($result);
 
-		for ($i = 0; $i < $num_pitchers; $i++) { 
+		for ($i = 0; $i < $num_teams; $i++) { 
 			$rotowire_lineups['pitchers'][$i]['name'] = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->text();
 			
 			$raw_data = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->parent()->text();
 			$team = preg_replace('/(\w+)(:)(.*)/', '$1', $raw_data);
-			$rotowire_lineups['pitchers'][$i]['team'] = $this->mod_name->from_rotowire_lineup_to_fd($team);
+			$team = $this->mod_name->from_rotowire_lineup_to_fd($team);
+			$rotowire_lineups['pitchers'][$i]['team'] = $team;
 
 			$raw_data = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->next('span')->text();
 			$hand = preg_replace('/(.*)(\()(\w+)(\))/', '$3', $raw_data);
 			$rotowire_lineups['pitchers'][$i]['hand'] = $hand;
+
+			for ($n = 0; $n < 9; $n++) { 
+				if (($i % 2) == 0) { // even (away team)
+					$rotowire_lineups['batters'][$i.($n+1)]['name'] = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->parent()->parent()->parent()->prev('div[class*=dlineups-half')->prev('div[class*=dlineups-half')->find('div a:eq('.$n.')')->text();
+
+					$rotowire_lineups['batters'][$i.($n+1)]['team'] = $team;
+
+					$hand = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->parent()->parent()->parent()->prev('div[class*=dlineups-half')->prev('div[class*=dlineups-half')->find('div span:eq('.$n.')')->text();
+					$rotowire_lineups['batters'][$i.($n+1)]['hand'] = preg_replace('/(.*)(\()(\w+)(\))/', '$3', $hand);
+				} else { // odd (home team)
+					$rotowire_lineups['batters'][$i.($n+1)]['name'] = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->parent()->parent()->parent()->prev('div[class*=dlineups-half')->find('div a:eq('.$n.')')->text();
+
+					$rotowire_lineups['batters'][$i.($n+1)]['team'] = $team;
+
+					$hand = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->parent()->parent()->parent()->prev('div[class*=dlineups-half')->prev('div[class*=dlineups-half')->find('div span:eq('.$n.')')->text();
+					$rotowire_lineups['batters'][$i.($n+1)]['hand'] = preg_replace('/(.*)(\()(\w+)(\))/', '$3', $hand);
+				}
+
+				$rotowire_lineups['batters'][$i.($n+1)]['batting_order'] = $n + 1;
+			}		
 		}
+
+		# echo '<pre>';
+		# var_dump($rotowire_lineups['batters']);
+		# echo '</pre>'; exit();
 
 		return $rotowire_lineups;
 	}
@@ -47,6 +72,10 @@ class scraping_model extends CI_Model {
 
 		if ($month_and_day == $h1_tag_with_date) {
 			$month_and_day = preg_replace("/(.+)(\w\w\w\s\d+)(\w\w\s\(Early Only\))/", "$2", $h1_tag_with_date);
+		}
+
+		if ($month_and_day == $h1_tag_with_date) {
+			$month_and_day = preg_replace("/(.+)(\w\w\w\s\d+)(\w\w\s\(Late Afternoon\))/", "$2", $h1_tag_with_date);
 		}
 
 		$date = date('Y-m-d', strtotime($month_and_day.', '.$today_year));
