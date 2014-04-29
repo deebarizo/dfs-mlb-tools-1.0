@@ -164,3 +164,13 @@ p.league-time {
 table.leagues {
 	width: 270px;
 }
+
+
+
+/*******************************************
+DASHBOARD
+********************************************/
+
+.projections-table-container .projections .hide-row {
+	display: none;
+}

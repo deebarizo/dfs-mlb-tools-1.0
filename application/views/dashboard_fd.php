@@ -33,6 +33,8 @@
 									<tr>
 										<th data-sort='string'>Pos</th>
 										<th data-sort='string'>Name</th>
+										<th data-sort='int'>BO</th>
+										<th data-sort='string'>Hand</th>
 										<th data-sort='string'>Team</th>
 										<th data-sort='string'>Opp</th>
 										<th data-sort='string'>Opp P</th>
@@ -45,10 +47,10 @@
 								<tbody>
 									<?php foreach ($batters as $key => $value) { ?>
 										<?php 
-											if (is_numeric($value['batting_order'])) {
+											if ($value['batting_order'] > 0) {
 												$toggle_in_lineup = "show-row in-lineup ";
 											} else {
-												$toggle_in_lineup = "";
+												$toggle_in_lineup = "hide-row ";
 											}
 
 											if (is_null($value['top_play_index'])) {
@@ -60,6 +62,8 @@
 			 							<tr class="<?php echo $toggle_in_lineup; ?>player<?php echo $toggle_top_play; ?>" data-index="<?php echo $key; ?>">
 											<td class="position"><?php echo $value['position']; ?></td>
 											<td class="name"><?php echo $value['name']; ?></td>
+											<td class="name"><?php echo $value['batting_order']; ?></td>
+											<td class="team"><?php echo isset($value['hand']) ? $value['hand'] : 'N'; ?></td>
 											<td class="team"><?php echo $value['team']; ?></td>
 											<td class="opponent"><?php echo $value['opponent']; ?></td>
 											<td class="opponent-pitcher"><?php echo $value['opponent_pitcher']; ?></td>

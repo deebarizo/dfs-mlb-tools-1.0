@@ -89,12 +89,14 @@ class Dashboard extends CI_Controller {
 				if ($batter['name'] == $lineup['name'] AND $batter['team'] == $lineup['team']) {
 					$batter['batting_order'] = $lineup['batting_order'];
 
+					$batter['hand'] = $lineup['hand'];
+
 					break;
 				}
 			}
 
 			if (isset($batter['batting_order']) == false) {
-				$batter['batting_order'] = 'Not in a lineup';
+				$batter['batting_order'] = 0;
 			}
 		}
 
