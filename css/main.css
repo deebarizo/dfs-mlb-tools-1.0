@@ -20,6 +20,10 @@ td, th {
 	width: 1024px;	
 }
 
+tbody tr:hover {
+  background-color: lightyellow;
+}
+
 
 
 /*******************************************
@@ -56,6 +60,14 @@ table.projections th.name, td.name {
 	width: 20%;
 }
 
+table.projections th.batting-order, td.batting-order {
+	width: 4%;
+}
+
+table.projections th.hand, td.hand {
+	width: 4%;
+}
+
 table.projections th.team, td.team {
 	width: 4%;
 }
@@ -69,6 +81,10 @@ table.projections th.opponent-pitcher, td.opponent-pitcher {
 }
 
 table.projections th.opponent-era, td.opponent-era {
+	width: 4%;
+}
+
+table.projections th.opponent-hand, td.opponent-hand {
 	width: 4%;
 }
 
