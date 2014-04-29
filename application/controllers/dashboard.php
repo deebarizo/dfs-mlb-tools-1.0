@@ -49,13 +49,18 @@ class Dashboard extends CI_Controller {
 
 		$batters = $this->remove_position($fstats_fd, 'pitcher');
 
+		/* echo '<pre>';
+		echo "Batters ";
+		var_dump($batters);
+		echo "Rotowire Lineups ";
+		var_dump($rotowire_lineups);
+		echo "Pitcher Stats ";
+		var_dump($pitcher_stats);
+		echo '</pre>'; exit(); */
+
 		$batters = $this->add_starting_pitchers($batters, $rotowire_lineups, $pitcher_stats);
 
 		$batter_projections = $this->projections_model->generate_fd_batter_projections($date, $batters);
-
-		# echo '<pre>';
-		# var_dump($batters);
-		# echo '</pre>'; exit();
 
 		if (is_array($batter_projections)) {
 			$batters = $this->calculate_vr($batters, $batter_projections);
@@ -117,7 +122,11 @@ class Dashboard extends CI_Controller {
 					$salary['opponent_hand'] = $pitcher['hand'];
 
 					break;
-				}				
+				}
+			}
+
+			if (isset($salary['opponent_pitcher']) == false) {
+				unset($salaries[$key]);
 			}
 		}
 

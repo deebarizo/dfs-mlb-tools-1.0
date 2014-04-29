@@ -125,43 +125,43 @@ class projections_model extends CI_Model {
 						    	$singles = $hits - $doubles - $triples - $hr;
 						    	$outs = $ab - $hits;
 
-						    	$era_mod = $this->calculations->era_mod($batter['opponent_era']);
+						    	if (isset($batter['opponent_era'])) {
+						    		$era_mod = $this->calculations->era_mod($batter['opponent_era']);
 
-						    	if (isset($batter['opponent_era']) == false) {
+    						    	$projections[$player_id]['name'] = $name;
+							    	$projections[$player_id]['games'] = $games;
+
+							    	$pa = 'NA';
+
+							    	$projections[$player_id]['bb_zips'] = $this->calculations->stat_projection_fd($bb, $games, $pa, $era_mod['bb'], 'bb');
+							    	$projections[$player_id]['hbp_zips'] = $hbp / $games;
+							    	$projections[$player_id]['singles_zips'] = $this->calculations->stat_projection_fd($singles, $games, $pa,  $era_mod['singles'], 'singles');
+							    	$projections[$player_id]['doubles_zips'] = $this->calculations->stat_projection_fd($doubles, $games, $pa,  $era_mod['doubles'], 'doubles');
+							    	$projections[$player_id]['triples_zips'] = $this->calculations->stat_projection_fd($triples, $games, $pa,  $era_mod['triples'], 'triples');
+							    	$projections[$player_id]['hr_zips'] = $this->calculations->stat_projection_fd($hr, $games, $pa,  $era_mod['hr'], 'hr');
+							    	$projections[$player_id]['rbi_zips'] = $this->calculations->stat_projection_fd($rbi, $games, $pa,  $era_mod['rbi'], 'rbi');
+							    	$projections[$player_id]['runs_zips'] = $this->calculations->stat_projection_fd($runs, $games, $pa,  $era_mod['runs'], 'runs');
+
+							    	$projections[$player_id]['sb_zips'] = ($sb / $games) * 2;
+
+							    	$projections[$player_id]['outs_zips'] = $this->calculations->stat_projection_fd($outs, $games, $pa,  $era_mod['outs'], 'outs');
+
+							    	$total = 0;
+							    	foreach ($projections[$player_id] as $key => $value) {
+							    		if ((strpos($key,'zips') !== false)) {
+							    			$total += $value;
+							    		}
+							    	}
+
+									$projections[$player_id]['total_zips'] = $total;
+
+					    			break;
+						    	} else if ($batter['opponent_pitcher'] != NULL) {
 							    	echo '<pre>Missing opponent pitcher:';
 							    	var_dump($batter);
 									var_dump($era_mod);
-									echo '</pre>';					    		
+									echo '</pre>';						    		
 						    	}
-
-						    	$projections[$player_id]['name'] = $name;
-						    	$projections[$player_id]['games'] = $games;
-
-						    	$pa = 'NA';
-
-						    	$projections[$player_id]['bb_zips'] = $this->calculations->stat_projection_fd($bb, $games, $pa, $era_mod['bb'], 'bb');
-						    	$projections[$player_id]['hbp_zips'] = $hbp / $games;
-						    	$projections[$player_id]['singles_zips'] = $this->calculations->stat_projection_fd($singles, $games, $pa,  $era_mod['singles'], 'singles');
-						    	$projections[$player_id]['doubles_zips'] = $this->calculations->stat_projection_fd($doubles, $games, $pa,  $era_mod['doubles'], 'doubles');
-						    	$projections[$player_id]['triples_zips'] = $this->calculations->stat_projection_fd($triples, $games, $pa,  $era_mod['triples'], 'triples');
-						    	$projections[$player_id]['hr_zips'] = $this->calculations->stat_projection_fd($hr, $games, $pa,  $era_mod['hr'], 'hr');
-						    	$projections[$player_id]['rbi_zips'] = $this->calculations->stat_projection_fd($rbi, $games, $pa,  $era_mod['rbi'], 'rbi');
-						    	$projections[$player_id]['runs_zips'] = $this->calculations->stat_projection_fd($runs, $games, $pa,  $era_mod['runs'], 'runs');
-
-						    	$projections[$player_id]['sb_zips'] = ($sb / $games) * 2;
-
-						    	$projections[$player_id]['outs_zips'] = $this->calculations->stat_projection_fd($outs, $games, $pa,  $era_mod['outs'], 'outs');
-
-						    	$total = 0;
-						    	foreach ($projections[$player_id] as $key => $value) {
-						    		if ((strpos($key,'zips') !== false)) {
-						    			$total += $value;
-						    		}
-						    	}
-
-								$projections[$player_id]['total_zips'] = $total;
-
-				    			break;
 				    		}
 				    	}
 					}
