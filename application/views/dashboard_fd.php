@@ -48,7 +48,7 @@
 								<tbody>
 									<?php foreach ($batters as $key => $value) { ?>
 										<?php 
-											if ($value['batting_order'] > -1) {
+											if ($value['batting_order'] > 0) {
 												$toggle_in_lineup = "show-row in-lineup ";
 											} else {
 												$toggle_in_lineup = "hide-row ";

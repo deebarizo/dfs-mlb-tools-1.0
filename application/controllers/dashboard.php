@@ -107,6 +107,10 @@ class Dashboard extends CI_Controller {
 
 		unset($batter);
 
+		# echo '<pre>';
+		# var_dump($batters);
+		# echo '</pre>'; exit();
+
 		return $batters;
 	}
 
