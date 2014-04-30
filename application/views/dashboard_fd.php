@@ -3,19 +3,36 @@
 				<div class="options-dashboard">
 					<h3><?php echo $subhead; ?></h3>
 
-	      			<h4>Position</h4>
+	      			<div class="option-dashboard">
+		      			<h4>Position</h4>
 
-					<form action="">
-						<select class="position-drop-down" name="position-drop-down">
-							<option value="all" selected>All</option>
-							<option value="C">C</option>
-							<option value="1B">1B</option>
-							<option value="2B">2B</option>
-							<option value="3B">3B</option>
-							<option value="SS">SS</option>
-							<option value="OF">OF</option>
-						</select>
-					</form>
+						<form action="">
+							<select class="position-drop-down" name="position-drop-down">
+								<option value="all" selected>All</option>
+								<option value="C">C</option>
+								<option value="1B">1B</option>
+								<option value="2B">2B</option>
+								<option value="3B">3B</option>
+								<option value="SS">SS</option>
+								<option value="OF">OF</option>
+							</select>
+						</form>
+					</div>
+
+	      			<div class="option-dashboard">
+		      			<h4>In Lineup</h4>
+
+						<form action="">
+							<label>
+								<input type="radio" name="in-lineup-toggle" value="Yes" checked>
+								Yes
+							</label>
+							<label>
+								<input type="radio" name="in-lineup-toggle" value="No">
+								No
+							</label>
+						</form>
+					</div>
 				</div>
 			</section>
 			<section>

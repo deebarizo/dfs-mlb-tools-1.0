@@ -17,10 +17,16 @@ $(document).ready(function() {
 
 		$('.projections tr.player').removeClass('show-row').addClass('hide-row');
 
-		if (options['position'] == 'all') {
-			$(".player.hide-row.in-lineup").addClass('show-row').removeClass('hide-row');
+		if (options['inLineupToggle'] == 'Yes') {
+			var inLineup = ".in-lineup";
 		} else {
-			$('.projections tr.player.hide-row.in-lineup').each(function() {
+			var inLineup = '';
+		}
+
+		if (options['position'] == 'all') {
+			$(".player.hide-row"+inLineup).addClass('show-row').removeClass('hide-row');
+		} else {
+			$('.projections tr.player.hide-row'+inLineup).each(function() {
 			    var position = $(this).find(".position").text();
 
 			    if (position == options['position']) {
@@ -36,6 +42,7 @@ $(document).ready(function() {
 		var options = {};
 
 		options['position'] = getPositionDashboard();
+		options['inLineupToggle'] = $('input:radio[name=in-lineup-toggle]:checked').val();
 
 		return options;
 	}
@@ -49,6 +56,10 @@ $(document).ready(function() {
 	$('select[name=position-drop-down]').change(function() {
 		changeOptionsDashboard();
 	}); 
+
+	$("input[name=in-lineup-toggle]:radio").change(function () {
+		changeOptionsDashboard();
+	});
 
 
 

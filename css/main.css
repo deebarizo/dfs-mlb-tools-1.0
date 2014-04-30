@@ -27,7 +27,7 @@ tbody tr:hover {
 
 
 /*******************************************
-ONE COLUMN
+DASHBOARD
 ********************************************/
 
 div.options-dashboard {
@@ -36,10 +36,21 @@ div.options-dashboard {
 	padding: 10px;
 }
 
+div.options-dashboard h3 {
+	margin-bottom: 0;
+}
+
+div.option-dashboard {
+	margin: 0 20px 0 0; 
+	display: inline;
+	float: left;
+}
+
 div.projections {
 	width: 984px;
-	margin: 0 10px; 
+	margin: 10px 10px 0 10px; 
 	padding: 10px;
+	clear: both;
 }
 
 div.projections-table-container {
@@ -50,6 +61,10 @@ div.projections-table-container {
 table.projections {
 	width: 967px;
 	font-size: .90em;
+}
+
+.projections-table-container .projections .hide-row {
+	display: none;
 }
 
 table.projections th.position, td.position {
@@ -183,10 +198,3 @@ table.leagues {
 
 
 
-/*******************************************
-DASHBOARD
-********************************************/
-
-/* .projections-table-container .projections .hide-row {
-	display: none;
-} */
