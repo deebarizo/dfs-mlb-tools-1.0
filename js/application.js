@@ -119,7 +119,7 @@ $(document).ready(function() {
 		} 		
 	}
 
-	$("button.save-top-plays").click(function() {
+	$("button.save-top-plays.fd").click(function() {
 		var topPlays = [];
 		var playerData = [];
 
@@ -146,6 +146,47 @@ $(document).ready(function() {
 
     	$.ajax({
             url: 'http://localhost/dfsmlbtools/daily/update_top_plays/'+leagueID,
+            type: 'POST',
+            data: { topPlays: topPlays },
+            success: function() {
+				$("span.save-top-plays-confirmation").show();
+
+				setTimeout(function() {
+					$("span.save-top-plays-confirmation").fadeOut("slow");
+				}, 2000);
+            }
+        });
+	});
+
+	$("button.save-top-plays.dk").click(function() {
+		var topPlays = [];
+		var playerData = [];
+
+		$("table.top-plays tr[data-index]").each(function(index) {
+			playerData = $(this).children();
+
+		    topPlays.push({
+		    	dataIndex: $(this).data("index"),
+		    	position: $(playerData[0]).text(),
+		    	name: $(playerData[1]).text(),
+		    	salary: $(playerData[2]).text(),
+		    	gameInfo: $(playerData[3]).text()
+		    });
+		});
+
+		if (topPlays.length == 0) {
+			topPlays = "empty";
+		}
+
+		var leagueID = $("table.salaries").data("id");
+
+		console.log("topPlays");
+		console.log(topPlays);
+		console.log("leagueID");
+		console.log(leagueID);
+
+    	$.ajax({
+            url: 'http://localhost/dfsmlbtools/daily/update_top_plays_dk/'+leagueID,
             type: 'POST',
             data: { topPlays: topPlays },
             success: function() {

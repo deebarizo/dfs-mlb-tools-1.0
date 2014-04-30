@@ -223,6 +223,36 @@ class Daily extends CI_Controller {
 		}
 	}
 
+	public function update_top_plays_dk($league_id) {
+		$top_plays = $this->input->post("topPlays");
+
+		$date = preg_replace("/(\d\d\d\d)(\d\d)(\d\d)(.*)/", "$1-$2-$3", $league_id);
+		$time = preg_replace("/(\d\d\d\d)(\d\d)(\d\d)(.*)/", "$4", $league_id);
+
+		$sql = 'UPDATE `salaries_dk` SET `top_play_index` = NULL WHERE `date` = :date AND `time` = :time';
+		$s = $this->db->conn_id->prepare($sql);
+		$s->bindValue(':date', $date);
+		$s->bindValue(':time', $time);
+		$s->execute();
+
+		if ($top_plays != "empty") {
+			foreach ($top_plays as $key => $value) {
+				$sql = 'UPDATE `salaries_dk`
+						SET top_play_index = :top_play_index 
+						WHERE `date` = :date AND `time` = :time
+							AND name = :name
+							AND salary = :salary';
+				$s = $this->db->conn_id->prepare($sql);
+				$s->bindValue(':top_play_index', $value['dataIndex']);
+				$s->bindValue(':date', $date);
+				$s->bindValue(':time', $time);
+				$s->bindValue(':name', $value['name']);
+				$s->bindValue(':salary', $value['salary']);
+				$s->execute(); 				
+			}
+		}		 			
+	}
+
 	public function capitalize_time($time) {
 		switch ($time) {
 			case 'all-day':

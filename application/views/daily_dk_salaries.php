@@ -29,7 +29,7 @@
 										?>
 			 							<tr class="player<?php echo $toggle_top_play; ?>" data-index="<?php echo $key; ?>">
 											<td class="position"><?php echo $value['position']; ?></td>
-											<td class="name"><?php echo $value['name']; ?></td>
+											<td class="name dk"><?php echo $value['name']; ?></td>
 											<td class="salary"><?php echo $value['salary']; ?></td>
 											<td class="game_info"><?php echo $value['game_info']; ?></td>
 										</tr>
@@ -39,11 +39,11 @@
 						</div>
 					<?php } ?>
 				</div>
-<!--
+
 				<div class="top-plays">
 		      		<h3>Top Plays</h3>
 
-		      		<button type="button" class="save-top-plays">Save</button> <span class="save-top-plays-confirmation">These top plays were saved.</span>
+		      		<button type="button" class="save-top-plays dk">Save</button> <span class="save-top-plays-confirmation">These top plays were saved.</span>
 		  
 		  			<div class="top-plays-table-container">
 						<table class="top-plays">
@@ -71,11 +71,8 @@
 										<tr data-index="<?php echo $value['top_play_index']; ?>">
 											<td><?php echo $value['position']; ?></td>
 											<td><?php echo $value['name']; ?></td>
-											<td><?php echo $value['fppg']; ?></td>
-											<td><?php echo $value['num_games']; ?></td>
-											<td><?php echo $value['team']; ?></td>
-											<td><?php echo $value['opponent']; ?></td>
 											<td><?php echo $value['salary']; ?></td>
+											<td><?php echo $value['game_info']; ?></td>
 										</tr>
 									<?php } ?>
 								<?php } ?>
@@ -85,7 +82,7 @@
 				</div>
 			</section>
 		</div>
-
+<!--
 			<section>
 				<div class="optimal-lineups">
 		      		<h3>Optimal Lineups</h3>

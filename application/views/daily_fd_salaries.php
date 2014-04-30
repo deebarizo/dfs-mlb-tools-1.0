@@ -49,7 +49,7 @@
 				<div class="top-plays">
 		      		<h3>Top Plays</h3>
 
-		      		<button type="button" class="save-top-plays">Save</button> <span class="save-top-plays-confirmation">These top plays were saved.</span>
+		      		<button type="button" class="save-top-plays fd">Save</button> <span class="save-top-plays-confirmation">These top plays were saved.</span>
 		  
 		  			<div class="top-plays-table-container">
 						<table class="top-plays">

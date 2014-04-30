@@ -118,7 +118,7 @@ table.projections th.vr, td.vr {
 
 
 /*******************************************
-TWO COLUMN
+DAILY
 ********************************************/
 
 div.salaries,
@@ -141,6 +141,10 @@ div.salaries-table-container {
 
 table.salaries {
 	width: 455px;
+}
+
+td.name.dk {
+	width: 60%;
 }
 
 div.top-plays {
