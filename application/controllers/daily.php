@@ -132,10 +132,18 @@ class Daily extends CI_Controller {
 
 		$data['salaries_dk'] = $s->fetchAll(PDO::FETCH_ASSOC);
 
+		$sql = 'SELECT * FROM `salaries_dk` WHERE `date` = :date AND `time` = :time AND `top_play_index` IS NOT NULL';
+		$s = $this->db->conn_id->prepare($sql);
+		$s->bindValue(':date', $date);
+		$s->bindValue(':time', $time);
+		$s->execute(); 	
+
+		$data['top_plays'] = $s->fetchAll(PDO::FETCH_ASSOC);
+
 		$data['league_id'] = preg_replace('/-/', '', $date).$time;
 
 		# echo '<pre>';
-		# var_dump($data['salaries_dk']);
+		# var_dump($data['top_plays']);
 		# echo '</pre>'; exit();
 
 		$this->load->view('templates/header', $data);
