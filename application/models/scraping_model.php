@@ -20,7 +20,7 @@ class scraping_model extends CI_Model {
 			$rotowire_lineups['pitchers'][$i]['name'] = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->text();
 			
 			$raw_data = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->parent()->text();
-			$team = preg_replace('/(\w+)(:)(.*)/', '$1', $raw_data);
+			$team = preg_replace('/(\w+)(.*)/', '$1', $raw_data);
 			$team = $this->mod_name->from_rotowire_lineup_to_fd($team);
 			$rotowire_lineups['pitchers'][$i]['team'] = $team;
 
@@ -60,7 +60,7 @@ class scraping_model extends CI_Model {
 		}
 
 		# echo '<pre>';
-		# var_dump($rotowire_lineups['batters']);
+		# var_dump($rotowire_lineups);
 		# echo '</pre>'; exit();
 
 		return $rotowire_lineups;
