@@ -9,7 +9,7 @@ class projections_model extends CI_Model {
 		$this->load->library('mod_name');
 	}
 
-	public function get_fd_pitcher_stats($date) {
+	public function get_fd_pitcher_projections($date) {
 		$csv_zips_file = 'files/projections/'.preg_replace('/-/', '', $date).'_zips_pitcher.csv';
 
 		if (file_exists($csv_zips_file)) {
@@ -120,6 +120,8 @@ class projections_model extends CI_Model {
 
 						    	$sb = $csv_data[13];
 
+						    	$woba = $csv_data[19];
+
 						    	$player_id = $csv_data[23];
 
 						    	$singles = $hits - $doubles - $triples - $hr;
@@ -148,12 +150,16 @@ class projections_model extends CI_Model {
 
 							    	$total = 0;
 							    	foreach ($projections[$player_id] as $key => $value) {
-							    		if ((strpos($key,'zips') !== false)) {
+							    		if (strpos($key,'zips') !== false AND $key != 'woba_zips') {
 							    			$total += $value;
 							    		}
 							    	}
 
 									$projections[$player_id]['total_zips'] = $total;
+
+									$projections[$player_id]['total_wo_sb_zips'] = $projections[$player_id]['total_zips'] - $projections[$player_id]['sb_zips'];
+
+									$projections[$player_id]['woba_zips'] = $woba;
 
 					    			break;
 						    	} else if ($batter['opponent_pitcher'] != NULL) {
@@ -203,6 +209,8 @@ class projections_model extends CI_Model {
 
 						    	$sb = $csv_data[12];
 
+						    	$woba = $csv_data[18];
+
 						    	$player_id = $csv_data[22];
 
 						    	$singles = $hits - $doubles - $triples - $hr;
@@ -238,12 +246,16 @@ class projections_model extends CI_Model {
 
 						    	$total = 0;
 						    	foreach ($projections[$player_id] as $key => $value) {
-						    		if ((strpos($key,'steamer') !== false)) {
+						    		if (strpos($key,'steamer') !== false AND $key != 'woba_zips') {
 						    			$total += $value;
 						    		}
 						    	}
 
-								$projections[$player_id]['total_steamer'] = $total;				    		
+								$projections[$player_id]['total_steamer'] = $total;	
+
+								$projections[$player_id]['total_wo_sb_steamer'] = $projections[$player_id]['total_steamer'] - $projections[$player_id]['sb_steamer'];			    		
+
+								$projections[$player_id]['woba_steamer'] = $woba;
 
 						    	break;
 							}
@@ -257,31 +269,47 @@ class projections_model extends CI_Model {
 			return 'The Steamer csv file for batters is missing.';
 		}
 
+		$avg_keys = array('total', 'total_wo_sb', 'woba');
+
 		foreach ($projections as $key => &$value) {
-			if (isset($value['total_zips']) AND isset($value['total_steamer'])) {
-				$value['total_final'] = ($value['total_zips'] + $value['total_steamer']) / 2;
-				continue;
-			}
+			foreach ($avg_keys as $avg_key) {
+				if (isset($value[$avg_key.'_zips']) AND isset($value[$avg_key.'_steamer'])) {
+					$value[$avg_key.'_final'] = ($value[$avg_key.'_zips'] + $value[$avg_key.'_steamer']) / 2;
+					continue;
+				}
 
-			if (isset($value['total_zips'])) {
-				$value['total_final'] = $value['total_zips'];
-				continue;
-			}
+				if (isset($value[$avg_key.'_zips'])) {
+					$value[$avg_key.'_final'] = $value[$avg_key.'_zips'];
+					continue;
+				}
 
-			if (isset($value['total_steamer'])) {
-				$value['total_final'] = $value['total_steamer'];
-				continue;
+				if (isset($value[$avg_key.'_steamer'])) {
+					$value[$avg_key.'_final'] = $value[$avg_key.'_steamer'];
+					continue;
+				}
 			}
-		}
+		}	
 
 		unset($value);
 
 		foreach ($projections as $key => &$value) {
 			$value['total_final'] = round($value['total_final'], 2);
 			$value['total_final'] = number_format($value['total_final'], 2);
+
+			$value['total_wo_sb_final'] = round($value['total_wo_sb_final'], 2);
+			$value['total_wo_sb_final'] = number_format($value['total_wo_sb_final'], 2);
+
+			$value['woba_final'] = round($value['woba_final'], 3);
+			$value['woba_final'] = number_format($value['woba_final'], 3);
 		}
 
 		unset($value);
+
+		$correlation = $this->calculations->calculate_correlation($projections, 'total_wo_sb_final', 'woba_final');
+
+    	echo '<pre>';
+    	var_dump($projections);
+		echo '</pre>'; exit();
 
 		return $projections;
 	}

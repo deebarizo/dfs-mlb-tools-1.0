@@ -17,7 +17,7 @@ class Dashboard extends CI_Controller {
 		$data['subhead'] = 'Dashboard FD - '.$date.' - '.$capitalized_time;	
 
 		$this->load->model('projections_model');
-		$pitcher_stats = $this->projections_model->get_fd_pitcher_stats($date);	
+		$pitcher_stats = $this->projections_model->get_fd_pitcher_projections($date);	
 
 		$this->load->model('scraping_model');
 		$rotowire_lineups = $this->scraping_model->scrape_rotowire_lineups($date, $time);

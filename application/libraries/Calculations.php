@@ -1,6 +1,12 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
 
 class Calculations {
+	public function calculate_correlation($array, $x_var, $y_var) {
+
+
+		return $correlation;
+	}
+
 	public function stat_projection_fd($raw_projection, $games, $pa, $era_mod, $stat) {
 		if ($games != 'NA' AND $pa == 'NA') {
 			switch ($stat) {
