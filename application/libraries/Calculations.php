@@ -1,8 +1,52 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
 
 class Calculations {
-	public function calculate_correlation($array, $x_var, $y_var) {
+	public function calculate_correlation($xy_array, $x_var, $y_var) {
+		$variables = array('x' => $x_var, 'y' =>$y_var);
 
+		foreach ($variables as $key => $variable) {
+			$total = 0;
+
+			foreach ($xy_array as $value) {
+				$total += $value[$variable];
+			}
+
+			$mean[$variable] = $total / count($xy_array);
+		}
+
+		foreach ($variables as $key => $variable) {
+			if ($key == 'x') { $key2 = 'a'; }
+			if ($key == 'y') { $key2 = 'b'; }
+
+			foreach ($xy_array as $player_id => $value) {
+				$ab_array[$player_id][$key2] = $value[$variable] - $mean[$variable];
+			}
+		}
+
+		foreach ($ab_array as $key => &$value) {
+			$value['a_times_b'] = $value['a'] * $value['b'];
+			$value['a_squared'] = $value['a'] * $value['a'];
+			$value['b_squared'] = $value['b'] * $value['b'];
+		}		
+
+		unset($value);
+
+		$variables = array('a_times_b', 'a_squared', 'b_squared');
+
+		foreach ($variables as $key => $variable) {
+			$ab_results[$variable] = 0;
+
+			foreach ($ab_array as $value) {
+				$ab_results[$variable] += $value[$variable];
+			}
+		}
+		
+		$correlation = $ab_results['a_times_b'] / sqrt($ab_results['a_squared'] * $ab_results['b_squared']);
+		
+		echo '<pre>';
+    	var_dump($ab_results);
+    	var_dump($correlation);
+		echo '</pre>'; exit();
 
 		return $correlation;
 	}

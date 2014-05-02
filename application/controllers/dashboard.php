@@ -66,9 +66,18 @@ class Dashboard extends CI_Controller {
 			$batters = $this->calculate_vr($batters, $batter_projections);
 			$batters = $this->lineup_check($batters, $rotowire_lineups);
 
-			# echo '<pre>';
-			# var_dump($batters);
-			# echo '</pre>'; exit();
+			foreach ($batters as $key => &$batter) {
+				if (isset($batter['projection'])) {
+					$batter['projection'] = round($batter['projection'], 2);
+					$batter['projection'] = number_format($batter['projection'], 2);				
+				}
+			}
+
+			unset($batter);
+
+			echo '<pre>';
+			var_dump($batters);
+			echo '</pre>'; exit();
 
 			$data['batters'] = $batters;
 

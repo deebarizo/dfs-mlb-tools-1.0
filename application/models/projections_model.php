@@ -292,24 +292,11 @@ class projections_model extends CI_Model {
 
 		unset($value);
 
-		foreach ($projections as $key => &$value) {
-			$value['total_final'] = round($value['total_final'], 2);
-			$value['total_final'] = number_format($value['total_final'], 2);
+		# $correlation = $this->calculations->calculate_correlation($projections, 'total_wo_sb_final', 'woba_final');
 
-			$value['total_wo_sb_final'] = round($value['total_wo_sb_final'], 2);
-			$value['total_wo_sb_final'] = number_format($value['total_wo_sb_final'], 2);
-
-			$value['woba_final'] = round($value['woba_final'], 3);
-			$value['woba_final'] = number_format($value['woba_final'], 3);
-		}
-
-		unset($value);
-
-		$correlation = $this->calculations->calculate_correlation($projections, 'total_wo_sb_final', 'woba_final');
-
-    	echo '<pre>';
-    	var_dump($projections);
-		echo '</pre>'; exit();
+    	# echo '<pre>';
+    	# var_dump($projections);
+		# echo '</pre>'; exit();
 
 		return $projections;
 	}
