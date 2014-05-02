@@ -39,7 +39,7 @@ class scraping_model extends CI_Model {
 
 				for ($n = 0; $n < 9; $n++) { 
 					if (($i % 2) == 0) { // even (away team)
-						$name = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->parent()->parent()->parent()->prev('div[class*=dlineups-half')->prev('div[class*=dlineups-half')->find('div a:eq('.$n.')')->text();
+						$name = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->parent()->parent()->parent()->prev('div[class*=dlineups-half')->prev('div[class*=dlineups-half')->find('div a:eq('.$n.')')->attr('title');
 						if ($name != '') {
 							$rotowire_lineups['batters'][$i.($n+1)]['name'] = $name;
 
@@ -51,7 +51,7 @@ class scraping_model extends CI_Model {
 							break;
 						}
 					} else { // odd (home team)
-						$name = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->parent()->parent()->parent()->prev('div[class*=dlineups-half')->find('div a:eq('.$n.')')->text();
+						$name = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->parent()->parent()->parent()->prev('div[class*=dlineups-half')->find('div a:eq('.$n.')')->attr('title');
 						if ($name != '') {
 							$rotowire_lineups['batters'][$i.($n+1)]['name'] = $name;
 
@@ -69,9 +69,9 @@ class scraping_model extends CI_Model {
 			}
 		}
 
-		echo '<pre>';
-		var_dump($rotowire_lineups);
-		echo '</pre>'; exit();
+		# echo '<pre>';
+		# var_dump($rotowire_lineups);
+		# echo '</pre>'; exit();
 
 		return $rotowire_lineups;
 	}
