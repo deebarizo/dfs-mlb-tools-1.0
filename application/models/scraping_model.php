@@ -10,58 +10,68 @@ class scraping_model extends CI_Model {
 		$this->load->library('mod_name');
 	}
 
-	public function scrape_rotowire_lineups($date) {
+	public function scrape_rotowire_lineups($date, $time) {
 		$html = phpQuery::newDocumentFileHTML('http://www.rotowire.com/baseball/daily_lineups.htm');
 
 		$result = $html->find('div[class*=dlineups-pitchers] a');
 		$num_teams = count($result);
 
-		for ($i = 0; $i < $num_teams; $i++) { 
-			$rotowire_lineups['pitchers'][$i]['name'] = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->text();
-			
-			$raw_data = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->parent()->text();
-			$team = preg_replace('/(\w+)(.*)/', '$1', $raw_data);
-			$team = $this->mod_name->from_rotowire_lineup_to_fd($team);
-			$rotowire_lineups['pitchers'][$i]['team'] = $team;
-
-			$raw_data = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->next('span')->text();
-			$hand = preg_replace('/(.*)(\()(\w+)(\))/', '$3', $raw_data);
-			$rotowire_lineups['pitchers'][$i]['hand'] = $hand;
-
-			for ($n = 0; $n < 9; $n++) { 
-				if (($i % 2) == 0) { // even (away team)
-					$name = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->parent()->parent()->parent()->prev('div[class*=dlineups-half')->prev('div[class*=dlineups-half')->find('div a:eq('.$n.')')->text();
-					if ($name != '') {
-						$rotowire_lineups['batters'][$i.($n+1)]['name'] = $name;
-
-						$rotowire_lineups['batters'][$i.($n+1)]['team'] = $team;
-
-						$hand = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->parent()->parent()->parent()->prev('div[class*=dlineups-half')->prev('div[class*=dlineups-half')->find('div span:eq('.$n.')')->text();
-						$rotowire_lineups['batters'][$i.($n+1)]['hand'] = preg_replace('/(.*)(\()(\w+)(\))/', '$3', $hand);
-					} else {
-						break;
-					}
-				} else { // odd (home team)
-					$name = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->parent()->parent()->parent()->prev('div[class*=dlineups-half')->find('div a:eq('.$n.')')->text();
-					if ($name != '') {
-						$rotowire_lineups['batters'][$i.($n+1)]['name'] = $name;
-
-						$rotowire_lineups['batters'][$i.($n+1)]['team'] = $team;
-
-						$hand = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->parent()->parent()->parent()->prev('div[class*=dlineups-half')->find('div span:eq('.$n.')')->text();
-						$rotowire_lineups['batters'][$i.($n+1)]['hand'] = preg_replace('/(.*)(\()(\w+)(\))/', '$3', $hand);
-					} else {
-						break;
-					}
-				}
-
-				$rotowire_lineups['batters'][$i.($n+1)]['batting_order'] = $n + 1;
-			}		
+		if ($time == 'late') {
+			$earliest_game_time = strtotime('5:00PM');
 		}
 
-		# echo '<pre>';
-		# var_dump($rotowire_lineups);
-		# echo '</pre>'; exit();
+		for ($i = 0; $i < $num_teams; $i++) { 
+			$raw_data = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->parent()->parent()->parent()->parent()->parent()->prev()->find('div[class*=dlineups-topboxcenter-topline] a')->text();
+			$raw_data = preg_replace('/(\d+:\d+)(\s)(\w+)(.*)/', '$1$3', $raw_data);
+			$rotowire_game_time = strtotime($raw_data);
+
+			if ($rotowire_game_time > $earliest_game_time) {
+				$rotowire_lineups['pitchers'][$i]['name'] = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->text();
+				
+				$raw_data = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->parent()->text();
+				$team = preg_replace('/(\w+)(.*)/', '$1', $raw_data);
+				$team = $this->mod_name->from_rotowire_lineup_to_fd($team);
+				$rotowire_lineups['pitchers'][$i]['team'] = $team;
+
+				$raw_data = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->next('span')->text();
+				$hand = preg_replace('/(.*)(\()(\w+)(\))/', '$3', $raw_data);
+				$rotowire_lineups['pitchers'][$i]['hand'] = $hand;
+
+				for ($n = 0; $n < 9; $n++) { 
+					if (($i % 2) == 0) { // even (away team)
+						$name = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->parent()->parent()->parent()->prev('div[class*=dlineups-half')->prev('div[class*=dlineups-half')->find('div a:eq('.$n.')')->text();
+						if ($name != '') {
+							$rotowire_lineups['batters'][$i.($n+1)]['name'] = $name;
+
+							$rotowire_lineups['batters'][$i.($n+1)]['team'] = $team;
+
+							$hand = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->parent()->parent()->parent()->prev('div[class*=dlineups-half')->prev('div[class*=dlineups-half')->find('div span:eq('.$n.')')->text();
+							$rotowire_lineups['batters'][$i.($n+1)]['hand'] = preg_replace('/(.*)(\()(\w+)(\))/', '$3', $hand);
+						} else {
+							break;
+						}
+					} else { // odd (home team)
+						$name = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->parent()->parent()->parent()->prev('div[class*=dlineups-half')->find('div a:eq('.$n.')')->text();
+						if ($name != '') {
+							$rotowire_lineups['batters'][$i.($n+1)]['name'] = $name;
+
+							$rotowire_lineups['batters'][$i.($n+1)]['team'] = $team;
+
+							$hand = $html->find('div[class*=dlineups-pitchers] a:eq('.$i.')')->parent()->parent()->parent()->prev('div[class*=dlineups-half')->find('div span:eq('.$n.')')->text();
+							$rotowire_lineups['batters'][$i.($n+1)]['hand'] = preg_replace('/(.*)(\()(\w+)(\))/', '$3', $hand);
+						} else {
+							break;
+						}
+					}
+
+					$rotowire_lineups['batters'][$i.($n+1)]['batting_order'] = $n + 1;
+				}				
+			}
+		}
+
+		echo '<pre>';
+		var_dump($rotowire_lineups);
+		echo '</pre>'; exit();
 
 		return $rotowire_lineups;
 	}

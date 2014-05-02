@@ -20,7 +20,7 @@ class Dashboard extends CI_Controller {
 		$pitcher_stats = $this->projections_model->get_fd_pitcher_stats($date);	
 
 		$this->load->model('scraping_model');
-		$rotowire_lineups = $this->scraping_model->scrape_rotowire_lineups($date);
+		$rotowire_lineups = $this->scraping_model->scrape_rotowire_lineups($date, $time);
 
 		if (is_array($pitcher_stats) == false) {
 			$data['error'] = $pitcher_stats;
