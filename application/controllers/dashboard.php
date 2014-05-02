@@ -75,9 +75,9 @@ class Dashboard extends CI_Controller {
 
 			unset($batter);
 
-			echo '<pre>';
-			var_dump($batters);
-			echo '</pre>'; exit();
+			# echo '<pre>';
+			# var_dump($batters);
+			# echo '</pre>'; exit();
 
 			$data['batters'] = $batters;
 
@@ -99,7 +99,9 @@ class Dashboard extends CI_Controller {
 
 	public function lineup_check($batters, $rotowire_lineups) {
 		foreach ($batters as $key => &$batter) {
-			foreach ($rotowire_lineups['batters'] as $lineup) {
+			foreach ($rotowire_lineups['batters'] as &$lineup) {
+				$lineup['name'] = $this->mod_name->from_rotowire_to_fd($lineup['name']);
+
 				if ($batter['name'] == $lineup['name'] AND $batter['team'] == $lineup['team']) {
 					$batter['batting_order'] = $lineup['batting_order'];
 
@@ -108,6 +110,8 @@ class Dashboard extends CI_Controller {
 					break;
 				}
 			}
+
+			unset($lineup);
 
 			if (isset($batter['batting_order']) == false) {
 				$batter['batting_order'] = 0;
